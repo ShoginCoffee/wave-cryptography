@@ -1,0 +1,10 @@
+# depslib dependency file v1.0
+1663853217 source:c:\users\mortaza.ebeid\documents\prog\c\wave-cryptography\wavecrypt\main.c
+	<stdint.h>
+	<stdio.h>
+	<stdlib.h>
+	<stdint.h>
+	"wave.h"
+
+1663751848 c:\users\mortaza.ebeid\documents\prog\c\wave-cryptography\wavecrypt\wave.h
+
