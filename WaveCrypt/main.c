@@ -106,7 +106,7 @@ int main(){
 
     printf("Char array: %d", big);
 
-    //delete[] pCharArray;
+    //free(pCharArray);
 
     return 0;
 }
