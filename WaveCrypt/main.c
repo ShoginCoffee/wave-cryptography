@@ -11,6 +11,14 @@ void printb(char val) {
   }
 }
 
+unsigned short leToBe2B(unsigned char charArray[2]) {
+    return charArray[0] | charArray[1] << 8;
+}
+
+unsigned int leToBe4B(unsigned char charArray[4]) {
+    return charArray[0] | charArray[1] << 8 | charArray[2] << 16 | charArray[3] << 24;
+}
+
 
 /*
 // takes in file path and returns header struct
@@ -52,14 +60,18 @@ int main(){
     //createNewWave();
 
     unsigned char little[] = {0xdd, 0xcc, 0xbb, 0xaa};
-    int i;
+    unsigned char little2B[] = {0xbb, 0xaa};
+    /*int i;
     for (i = 0; i < 4; i++){
         printf("%x", little[i]);
     }
 
 
-    int big = little[3] << 24 | little[2] << 16 | little[1] << 8 | little[0];
-    printf("\n%x", big);
+    int big = little[3] << 24 | little[2] << 16 | little[1] << 8 | little[0];*/
+    int big = leToBe4B(little);
+    int big2B = leToBe2B(little2B);
+    printf("%x\n", big);
+    printf("%x\n", big2B);
 
     return 0;
 }
