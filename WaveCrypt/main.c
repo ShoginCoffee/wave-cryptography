@@ -43,71 +43,154 @@ unsigned char * intBeToChArLe (unsigned int num) {
 }
 
 
-/*
 // takes in file path and returns header struct
 struct HEADER headerToStruct(FILE* pWavOriginal) {
     unsigned char buffer4[4];
     unsigned char buffer2[2];
-    FILE* pWavOriginal = fopen("../AudioFiles/BabyElephantWalk60.wav", "rb");
-
-    if (pWavOriginal == NULL) {
-        printf("error opening file.");
-        return 1;
-    }
+    //FILE* pWavOriginal = fopen("../AudioFiles/BabyElephantWalk60.wav", "rb");
 
     // read header into struct
-    int read = 0;
+    int bytesRead = 0;
     struct HEADER header;
 
-    // RIFF
-    read = fread(header.riff, sizeof(header.riff), 1, pWavOriginal);
+    // RIFF 4 byte BE
+    bytesRead = fread(header.riff, sizeof(header.riff), 1, pWavOriginal);
     printf("1 - 4: %s \n", header.riff);
 
-    // overall_size
-    read = fread(buffer[4], sizeof(buffer[4]), 1, pWavOriginal);
+    // overall_size 4 byte LE
+    bytesRead = fread(buffer4[4], sizeof(buffer4[4]), 1, pWavOriginal);
 
+    //
 
     fclose(pWavOriginal);
     return header;
 }
-*/
 
-
-void createNewWave() {
+void createNewWave(){
     FILE* pWavEncoded = fopen("../AudioFiles/wavEncoded.wav", "wb");
     fclose(pWavEncoded);
+}
+
+void getUserInputInt(int *pUserInput) {
+    scanf("%d", pUserInput);
+    while(getchar() != '\n');
+}
+
+void help(){
+    printf("\n");
+    printf("information placeholder.");
+    printf("\n");
+    printf("press Enter to go back.\n\n");
+    getchar();
+}
+
+int mainMenu(){
+    // prints logo
+    printf("                                           /$$                        \n                                          | $$                        \n  /$$$$$$$  /$$$$$$  /$$   /$$  /$$$$$$  /$$$$$$    /$$$$$$   /$$$$$$ \n /$$_____/ /$$__  $$| $$  | $$ /$$__  $$|_  $$_/   /$$__  $$ /$$__  $$\n| $$      | $$  \\__/| $$  | $$| $$  \\ $$  | $$    | $$$$$$$$| $$  \\ $$\n| $$      | $$      | $$  | $$| $$  | $$  | $$ /$$| $$_____/| $$  | $$\n|  $$$$$$$| $$      |  $$$$$$$| $$$$$$$/  |  $$$$/|  $$$$$$$|  $$$$$$/\n \\_______/|__/       \\____  $$| $$____/    \\___/   \\_______/ \\______/ \n                     /$$  | $$| $$                                    \n                    |  $$$$$$/| $$                                    \n                     \\______/ |__/                                    ");
+
+    int userInput;
+    do {
+        printf("\n1: Encoding mode");
+        printf("\n2: Decoding mode");
+        printf("\n3: Help");
+        printf("\n4: Exit\n");
+
+        getUserInputInt(&userInput);
+    } while(userInput < 1 || userInput > 4);
+
+    return (userInput == 4 ? 0 : userInput);
+}
+
+int encodingMenu(char *filepathSecret, char *filepathWave, char *filepathNewWave){
+    int userInput;
+    do {
+        printf("\n");
+        if (filepathSecret[0] == '\0') printf("\nno filepath to file that needs to be encoded into wave file");
+        if (filepathWave[0] == '\0') printf("\nno filepath to wave file that will be encoded into");
+        if (filepathNewWave[0] == '\0') printf("\nno filepath/directory used for export wave");
+        //  TEMPORARY NOTES:
+        //      check if directory exists:
+        //          DIR dir* = opendir(directory string)
+        //          if (ENOENT == errno)
+        //          errno.h
+
+        // OPTIONS
+        printf("\n\n1: Change filepath to secret file");
+        printf("\n2: Change filepath to wave file that will be encoded into");
+        printf("\n3: Change filepath/directory used for export wave");
+        printf("\n4: Help");
+        printf("\n5: Back\n");
+
+        getUserInputInt(&userInput);
+    } while(userInput < 1 || userInput > 5);
+
+    return (userInput == 5 ? 0 : userInput);
+}
+
+void menus(){
+    // for encoding
+    char filepathSecret[150] = "", filepathWave[150] = "", filepathNewWave[150] = "";
+    // for decoding
+    char filepathEncoded[150] = "", filepathDecodedSecret[150] = "";
+
+    int userInput;
+    do {
+        userInput = mainMenu();
+
+        switch(userInput) {
+        case 0:
+            break;
+        case 1:
+            // encoding mode menu
+            userInput = encodingMenu(&filepathSecret, &filepathWave, &filepathNewWave);
+
+            switch(userInput){
+            case 0:
+                userInput = 1; // back button pressed (not exit). To stay in main menu do-while loop
+                break;
+            case 1:
+                //change filepath to secret file
+                break;
+            case 2:
+                //change filepath to wave
+                break;
+            case 3:
+                //change filepath for export
+                break;
+            case 4:
+                help();
+                break;
+            }
+
+            break;
+        case 2:
+            // decoding mode menu
+            // userInput = encodingMenu(filepathEncoded, filepathDecodedSecret);
+            break;
+        case 3:
+            // help menu
+            help();
+            break;
+        default:
+            printf("ERROR IN SWTICH STATEMENT IN menus() FUNCTION. userInput VARIABLE OUT OF BOUNDS");
+        }
+    } while(userInput != 0);
 }
 
 int main(){
     //headerToStruct();
     //createNewWave();
 
-    //unsigned char little[] = {0xdd, 0xcc, 0xbb, 0xaa};
-    //unsigned char little2B[] = {0xbb, 0xaa};
-    /*int i;
-    for (i = 0; i < 4; i++){
-        printf("%x", little[i]);
-    }
+    short little = 0xbbaa;
 
-
-    int big = little[3] << 24 | little[2] << 16 | little[1] << 8 | little[0];*/
-    /*int big = leToBe4B(little);
-    int big2B = leToBe2B(little2B);
-    printf("%x\n", big);
-    printf("%x\n", big2B);*/
-
-    short big = 0xaabb;
-    unsigned char* pCharArray = shortBeToChArLe(big);
-    unsigned char charArray[2];
-    memcpy(charArray, pCharArray, 2);
-
-    big = chArLeToBeShort(charArray);
+    char pCharArray = shortBeToChArLe(little);
 
 
 
-    printf("Char array: %d", big);
+
+
+    menus();
 
     free(pCharArray);
-
     return 0;
 }
