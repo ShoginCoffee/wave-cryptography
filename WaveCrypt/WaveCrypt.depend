@@ -1,16 +1,18 @@
 # depslib dependency file v1.0
-<<<<<<< HEAD
-1663853217 source:c:\users\mortaza.ebeid\documents\prog\c\wave-cryptography\wavecrypt\main.c
+68 <<<<<<< HEAD
+
+1663936136 source:c:\users\mortaza.ebeid\documents\prog\c\wave-cryptography\wavecrypt\main.c
 	<stdint.h>
 	<stdio.h>
 	<stdlib.h>
 	<stdint.h>
 	"wave.h"
 
-1663751848 c:\users\mortaza.ebeid\documents\prog\c\wave-cryptography\wavecrypt\wave.h
-=======
+1663919894 c:\users\mortaza.ebeid\documents\prog\c\wave-cryptography\wavecrypt\wave.h
+
 1663766747 source:c:\users\theok\documents\programmering\wavecrypt\main.c
 	<stdio.h>
 	<stdlib.h>
->>>>>>> 9d64a67638ae70359eed38504318bd6b0c1fa570
+
+1663766747 4a67638ae70359eed38504318bd6b0c1fa570
 
