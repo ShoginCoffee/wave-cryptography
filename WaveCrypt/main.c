@@ -97,8 +97,9 @@ int main(){
     printf("%x\n", big2B);*/
 
     short big = 0xaabb;
+    unsigned char* pCharArray = shortBeToChArLe(big);
     unsigned char charArray[2];
-    memcpy(charArray, shortBeToChArLe(big), 2);
+    memcpy(charArray, pCharArray, 2);
 
     big = chArLeToBeShort(charArray);
 
@@ -106,7 +107,7 @@ int main(){
 
     printf("Char array: %d", big);
 
-    //free(pCharArray);
+    free(pCharArray);
 
     return 0;
 }
