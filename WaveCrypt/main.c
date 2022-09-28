@@ -24,8 +24,8 @@ unsigned int chArLeToBeInt(unsigned char charArray[4]) {
 unsigned char * shortBeToChArLe (unsigned short num) {
     unsigned char* pCharArray = malloc(2);
 
-    pCharArray[0] = num & 0xFF00;
-    pCharArray[1] = num & 0xFF;
+    pCharArray[0] = num & 0xFF;
+    pCharArray[1] = num & 0x00FF;
 
     return pCharArray;
 
@@ -34,10 +34,10 @@ unsigned char * shortBeToChArLe (unsigned short num) {
 unsigned char * intBeToChArLe (unsigned int num) {
     unsigned char* pCharArray = malloc(4);
 
-    pCharArray[0] = num & 0xFF000000;
-    pCharArray[1] = num & 0xFF0000;
-    pCharArray[2] = num & 0xFF00;
-    pCharArray[3] = num & 0xFF;
+    pCharArray[0] = num & 0xFF;
+    pCharArray[1] = num & 0xFF00;
+    pCharArray[2] = num & 0xFF0000;
+    pCharArray[3] = num & 0xFF000000;
 
     return pCharArray;
 }
@@ -181,16 +181,34 @@ int main(){
     //headerToStruct();
     //createNewWave();
 
-    short little = 0xbbaa;
+    unsigned char charArrayLittle[2] = {0xbb, 0xaa};
+    unsigned short shortBig = chArLeToBeShort(charArrayLittle);
 
-    char pCharArray = shortBeToChArLe(little);
+    unsigned char charArrayLittle4B[4] = {0xdd, 0xcc, 0xbb, 0xaa};
+    unsigned int intBig = chArLeToBeInt(charArrayLittle4B);
+
+    printf("ShortBig: %X\n", shortBig);
+    printf("IntBig: %X\n", intBig);
+
+    unsigned char * pCharArray2B = shortBeToChArLe(shortBig);
+    unsigned char * pCharArray4B = intBeToChArLe(intBig);
+
+    printf("pCharArray2B: ");
+    for (int i = 0; i < 2; i++) {
+        printf("%X", pCharArray2B[i]);
+    }
+    printf("\n");
+
+    printf("pCharArray4B: ");
+    for (int i = 0; i < 4; i++) {
+        printf("%X", pCharArray4B[i]);
+    }
+    printf("\n");
+
+    // menus();
 
 
-
-
-
-    menus();
-
-    free(pCharArray);
+    free(pCharArray2B);
+    free(pCharArray4B);
     return 0;
 }
