@@ -5,7 +5,6 @@
 #include <string.h>
 #include "wave.h"
 
-
 // takes char and prints bits
 void printb(char val) {
   for (int i = 7; 0 <= i; i--) {
@@ -28,7 +27,6 @@ unsigned char * shortBEToCharLE (unsigned short num) {
     pCharArray[1] = (num & 0xFF00) >> 8;
 
     return pCharArray;
-
 }
 
 unsigned char * intBEToCharLE (unsigned int num) {
@@ -42,7 +40,6 @@ unsigned char * intBEToCharLE (unsigned int num) {
     return pCharArray;
 }
 
-
 // takes in file path and returns header struct
 struct HEADER headerToStruct(FILE* pWavOriginal) {
     unsigned char buffer4[4];
@@ -55,7 +52,7 @@ struct HEADER headerToStruct(FILE* pWavOriginal) {
 
     // ChunkID  4 byte BE
     bytesRead = fread(header.ChunkID, sizeof(header.ChunkID), 1, pWavOriginal);
-    printf("RIFF: %s \n", header.ChunkID);
+    printf("ChunkID: %.4s \n", header.ChunkID);
 
     // ChunkSize 4 byte LE converted to BE
     bytesRead = fread(buffer4, sizeof(buffer4), 1, pWavOriginal);
@@ -64,11 +61,11 @@ struct HEADER headerToStruct(FILE* pWavOriginal) {
 
     // Format 4 byte BE
     bytesRead = fread(header.Format, sizeof(header.Format), 1, pWavOriginal);
-    printf("Format: %s \n", header.Format);
+    printf("Format: %.4s \n", header.Format);
 
     // Subchunk1ID 4 byte BE
     bytesRead = fread(header.Subchunk1ID, sizeof(header.Subchunk1ID), 1, pWavOriginal);
-    printf("Subchunk1ID: %s \n", header.Subchunk1ID);
+    printf("Subchunk1ID: %.4s \n", header.Subchunk1ID);
 
     // Subchunk1Size 4 byte LE converted to BE
     bytesRead = fread(buffer4, sizeof(buffer4), 1, pWavOriginal);
@@ -86,7 +83,7 @@ struct HEADER headerToStruct(FILE* pWavOriginal) {
     printf("NumChannels: %u \n", header.NumChannels);
 
     // SampleRate 4 byte LE converted to BE
-    bytesRead = fread(buffer4, sizeof(buffer2), 1, pWavOriginal);
+    bytesRead = fread(buffer4, sizeof(buffer4), 1, pWavOriginal);
     header.SampleRate = charLEToIntBE(buffer4);
     printf("SampleRate: %u \n", header.SampleRate);
 
@@ -107,7 +104,7 @@ struct HEADER headerToStruct(FILE* pWavOriginal) {
 
     // Subchunk2ID 4 byte BE
     bytesRead = fread(header.Subchunk2ID, sizeof(header.Subchunk2ID), 1, pWavOriginal);
-    printf("Subchunk2ID: %s \n", header.Subchunk2ID);
+    printf("Subchunk2ID: %.4s \n", header.Subchunk2ID);
 
     // Subchunk2Size 4 byte LE converted to BE
     bytesRead = fread(buffer4, sizeof(buffer4), 1, pWavOriginal);
@@ -233,7 +230,7 @@ int main(){
     //headerToStruct();
     //createNewWave();
 
-    //menus();
+    //return menus();
     FILE* pWavOriginal = fopen("../AudioFiles/BabyElephantWalk60.wav", "rb");
     struct HEADER header = headerToStruct(pWavOriginal);
 
