@@ -31,10 +31,14 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="chacha.h" />
+		<Unit filename="encoder.h" />
+		<Unit filename="headerLogic.h" />
+		<Unit filename="headerStruct.h" />
+		<Unit filename="hiddenFile.h" />
 		<Unit filename="main.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="wave.h" />
 		<Extensions>
 			<lib_finder disable_auto="1" />
 		</Extensions>

@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include "headerLogic.h"
 #include "chacha.h"
+#include "encoder.h"
 
 void createNewWave(){
     FILE* pWavEncoded = fopen("../AudioFiles/wavEncoded.wav", "wb");
@@ -124,11 +125,11 @@ int main(){
     //createNewWave();
     //menus();
 
-    /* menus and print header
+    //menus and print header
     //return menus();
     FILE* pWavOriginal = fopen("../AudioFiles/BabyElephantWalk60.wav", "rb");
     struct HEADER header = headerToStruct(pWavOriginal);
-    */
+
 
     /* quarterRound test
     unsigned int a = 0x11111111;
@@ -157,6 +158,7 @@ int main(){
     74 2e
     */
 
+    /*
     // chacha20 test
     uint8_t plainText[] = "Ladies and Gentlemen of the class of '99: If I could offer you only one tip for the future, sunscreen would be it.";
     int key[] = {
@@ -166,6 +168,7 @@ int main(){
     int counter[] = {0x00000001};
     int nonce[] = {0x00000000, 0x4a000000, 0x00000000};
 
+    //Printing original array
     for(int b = 0; b < 114; b++){
         printf("%x ", plainText[b]);
         if((b + 1) % 16 == 0 && b != 0) printf("\n");
@@ -174,6 +177,7 @@ int main(){
     chacha20(&plainText, 114, &key, &counter, &nonce);
     printf("\n\n");
 
+    //Printing encrypted array
     for(int a = 0; a < 114; a++) {
         printf("%x ", plainText[a]);
         if((a + 1) % 16 == 0 && a != 0) printf("\n");
@@ -182,10 +186,22 @@ int main(){
     chacha20(&plainText, 114, &key, &counter, &nonce);
     printf("\n\n");
 
+    //Printing decrypted array
     for(int a = 0; a < 114; a++) {
         printf("%x ", plainText[a]);
         if((a + 1) % 16 == 0 && a != 0) printf("\n");
     }
+    */
+    char fileName[] = "demo.txt";
+    char * pWaveData = pReadInWaveData(pWavOriginal, header);
+    FILE* pHiddenFile = fopen("demo.txt", "rb");
+
+
+    int i;
+    /*for (i = 0; i < header.Subchunk2Size; i++) {
+        *pWaveData[i] += changeBits(1, *pWaveData[i], hiddenData[0])
+    }*/
+
 
     return 0;
 }

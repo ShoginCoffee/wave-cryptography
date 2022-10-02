@@ -27,13 +27,14 @@
 
 1664207796 c:\users\theodor.kohler\documents\programmering\wave-cryptography\wavecrypt\wave.h
 
-1664390573 source:c:\users\theok\documents\programmering\wave-cryptography\wavecrypt\main.c
-	<stdint.h>
-	<stdio.h>
+1664734877 source:c:\users\theok\documents\programmering\wave-cryptography\wavecrypt\main.c
 	<stdlib.h>
 	<stdint.h>
 	<string.h>
-	"wave.h"
+	<stdio.h>
+	"headerLogic.h"
+	"chacha.h"
+	"encoder.h"
 
 1664390881 c:\users\theok\documents\programmering\wave-cryptography\wavecrypt\wave.h
 
@@ -62,4 +63,16 @@
 1664726765 c:\users\mortaza.ebeid\documents\prog\c\wave-cryptography\wavecrypt\chacha.h
 	<stdio.h>
 	<stdint.h>
+
+1664735375 c:\users\theok\documents\programmering\wave-cryptography\wavecrypt\headerlogic.h
+	<stdio.h>
+	"headerStruct.h"
+
+1664620257 c:\users\theok\documents\programmering\wave-cryptography\wavecrypt\headerstruct.h
+
+1664728722 c:\users\theok\documents\programmering\wave-cryptography\wavecrypt\chacha.h
+	<stdio.h>
+	<stdint.h>
+
+1664735331 c:\users\theok\documents\programmering\wave-cryptography\wavecrypt\encoder.h
 
