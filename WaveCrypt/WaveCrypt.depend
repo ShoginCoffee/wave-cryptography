@@ -1,13 +1,13 @@
 # depslib dependency file v1.0
 68 <<<<<<< HEAD
 
-1664527515 source:c:\users\mortaza.ebeid\documents\prog\c\wave-cryptography\wavecrypt\main.c
-	<stdint.h>
+1664726552 source:c:\users\mortaza.ebeid\documents\prog\c\wave-cryptography\wavecrypt\main.c
 	<stdlib.h>
 	<stdint.h>
 	<string.h>
 	<stdio.h>
 	"headerLogic.h"
+	"chacha.h"
 
 1664459683 c:\users\mortaza.ebeid\documents\prog\c\wave-cryptography\wavecrypt\wave.h
 
@@ -53,8 +53,13 @@
 	<stdio.h>
 	"wave.h"
 
-1664527559 c:\users\mortaza.ebeid\documents\prog\c\wave-cryptography\wavecrypt\headerlogic.h
+1664527572 c:\users\mortaza.ebeid\documents\prog\c\wave-cryptography\wavecrypt\headerlogic.h
 	<stdio.h>
+	"headerStruct.h"
 
 1664525044 c:\users\mortaza.ebeid\documents\prog\c\wave-cryptography\wavecrypt\headerstruct.h
+
+1664726765 c:\users\mortaza.ebeid\documents\prog\c\wave-cryptography\wavecrypt\chacha.h
+	<stdio.h>
+	<stdint.h>
 
