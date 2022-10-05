@@ -5,6 +5,8 @@
 #include "headerLogic.h"
 #include "chacha.h"
 #include "encoder.h"
+#include "hiddenDataHeaderStruct.h"
+#include "hiddenFile.h"
 
 void createNewWave(){
     FILE* pWavEncoded = fopen("../AudioFiles/wavEncoded.wav", "wb");
@@ -192,13 +194,16 @@ int main(){
         if((a + 1) % 16 == 0 && a != 0) printf("\n");
     }
     */
-    char fileName[] = "demo.txt";
     char * pWaveData = pReadInWaveData(pWavOriginal, header);
-    FILE* pHiddenFile = fopen("demo.txt", "rb");
+    char filePath[] = "C:/Users/theok/Documents/Programmering/wave-cryptography/WaveCrypt/demo.txt";
+    //Error is on the line below
+    struct HIDDENDATAHEADER hiddenDataHeader = hiddenDataHeaderToStruct(&filePath);
 
+    printf("Subchunk1Size: %d\n", hiddenDataHeader.Subchunk1Size);
+    printf("Subchunk2Size: %d\n", hiddenDataHeader.Subchunk2Size);
+    printf("FileName: %s\n", hiddenDataHeader.Filename);
 
-    int i;
-    /*for (i = 0; i < header.Subchunk2Size; i++) {
+    /*for (int i = 0; i < header.Subchunk2Size; i++) {
         *pWaveData[i] += changeBits(1, *pWaveData[i], hiddenData[0])
     }*/
 
