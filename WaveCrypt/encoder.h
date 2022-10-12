@@ -1,6 +1,5 @@
 #ifndef HEADERSTRUCT_H
 #define HEADERSTRUCT_H
-#endif
 #include <stdbool.h>
 
 
@@ -55,5 +54,5 @@ char changeBits(char whichBits, char byte, bool bit)
         break;
     }
 }
-
+#endif
 

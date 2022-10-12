@@ -3,10 +3,11 @@
 #include <string.h>
 #include <stdio.h>
 #include "headerLogic.h"
+#include "headerStruct.h"
 #include "chacha.h"
-#include "encoder.h"
-#include "hiddenDataHeaderStruct.h"
-#include "hiddenFile.h"
+//#include "encoder.h"
+//#include "hiddenDataHeaderStruct.h"
+//#include "hiddenFile.h"
 
 void createNewWave(){
     FILE* pWavEncoded = fopen("../AudioFiles/wavEncoded.wav", "wb");
@@ -123,42 +124,20 @@ void menus(){
 }
 
 int main(){
-    //headerToStruct();
-    //createNewWave();
+    //menus
     //menus();
 
-    //menus and print header
-    //return menus();
+
+
+    /* print header
     FILE* pWavOriginal = fopen("../AudioFiles/BabyElephantWalk60.wav", "rb");
-    struct HEADER header = headerToStruct(pWavOriginal);
-
-
-    /* quarterRound test
-    unsigned int a = 0x11111111;
-    unsigned int b = 0x01020304;
-    unsigned int c = 0x9b8d6f43;
-    unsigned int d = 0x01234567;
-
-
-    quarterRound(&a, &b, &c, &d);
-
-    printf("%x \n", a);
-    printf("%x \n", b);
-    printf("%x \n", c);
-    printf("%x \n", d);
+    struct WavHeader wavHeader = headerToStruct(pWavOriginal);
     */
+    for(int i= 0; i<204; i++){
+        printf("a");
+    }
 
 
-    /*
-    4c 61 64 69 65 73 20 61 6e 64 20 47 65 6e 74 6c  Ladies and Gentl
-    65 6d 65 6e 20 6f 66 20 74 68 65 20 63 6c 61 73  emen of the clas
-    73 20 6f 66 20 27 39 39 3a 20 49 66 20 49 20 63  s of '99: If I c
-    6f 75 6c 64 20 6f 66 66 65 72 20 79 6f 75 20 6f  ould offer you o
-    6e 6c 79 20 6f 6e 65 20 74 69 70 20 66 6f 72 20  nly one tip for
-    74 68 65 20 66 75 74 75 72 65 2c 20 73 75 6e 73  the future, suns
-    63 72 65 65 6e 20 77 6f 75 6c 64 20 62 65 20 69  creen would be i
-    74 2e
-    */
 
     /*
     // chacha20 test
@@ -194,8 +173,12 @@ int main(){
         if((a + 1) % 16 == 0 && a != 0) printf("\n");
     }
     */
+
+
+
+    /* Theo stuff
     char * pWaveData = pReadInWaveData(pWavOriginal, header);
-    char filePath[] = "C:/Users/theok/Documents/Programmering/wave-cryptography/WaveCrypt/demo.txt";
+    char filePath[] = "C:\\Users\\mortaza.ebeid\\Documents\\prog\\c\\wave-cryptography\\WaveCrypt\\demo.txt";
     //Error is on the line below
     struct HIDDENDATAHEADER hiddenDataHeader = hiddenDataHeaderToStruct(&filePath);
 
@@ -203,9 +186,11 @@ int main(){
     printf("Subchunk2Size: %d\n", hiddenDataHeader.Subchunk2Size);
     printf("FileName: %s\n", hiddenDataHeader.Filename);
 
-    /*for (int i = 0; i < header.Subchunk2Size; i++) {
-        *pWaveData[i] += changeBits(1, *pWaveData[i], hiddenData[0])
-    }*/
+    //for (int i = 0; i < header.Subchunk2Size; i++) {
+    //    *pWaveData[i] += changeBits(1, *pWaveData[i], hiddenData[0])
+    //}
+    */
+
 
 
     return 0;

@@ -31,8 +31,14 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="chacha.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="chacha.h" />
 		<Unit filename="encoder.h" />
+		<Unit filename="headerLogic.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="headerLogic.h" />
 		<Unit filename="headerStruct.h" />
 		<Unit filename="hiddenDataHeaderStruct.h" />

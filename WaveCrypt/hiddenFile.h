@@ -1,6 +1,5 @@
 #ifndef HIDDENDATAHEADERSTRUCT_H
 #define HIDDENDATAHEADERSTRUCT_H
-#endif
 
 char * pReadInHiddenFile(FILE* pHiddenFile, char fileName) {
     fseek(pHiddenFile, 0L, SEEK_END);
@@ -17,16 +16,14 @@ struct HIDDENDATAHEADER hiddenDataHeaderToStruct(char * pFilePath) {
     char fileName[] = "demo.txt";
 
     FILE * pDataFile = fopen(pFilePath, "rb");
-    printf("TEST2");
-    fseek(pDataFile, 0L, SEEK_END);
-
-    char dataSize = ftell(*pFilePath);
-    printf("TEST3");
-    printf("DataSize: %d", dataSize);
-
+    fseek(pDataFile, 0, SEEK_END);
+    long dataSize = ftell(pDataFile);
+    printf("DataSize: %d \n", dataSize);
     memcpy(&hiddenDataHeader.Filename, &fileName, sizeof(fileName));
     hiddenDataHeader.Subchunk1Size = 6 + sizeof(fileName);
-    hiddenDataHeader.Subchunk2Size = ftell(*pFilePath);
+    hiddenDataHeader.Subchunk2Size = ftell(pDataFile);
 
     return hiddenDataHeader;
 }
+
+#endif

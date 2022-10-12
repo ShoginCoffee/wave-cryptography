@@ -1,12 +1,13 @@
 # depslib dependency file v1.0
 68 <<<<<<< HEAD
 
-1664726552 source:c:\users\mortaza.ebeid\documents\prog\c\wave-cryptography\wavecrypt\main.c
+1665561450 source:c:\users\mortaza.ebeid\documents\prog\c\wave-cryptography\wavecrypt\main.c
 	<stdlib.h>
 	<stdint.h>
 	<string.h>
 	<stdio.h>
 	"headerLogic.h"
+	"headerStruct.h"
 	"chacha.h"
 
 1664459683 c:\users\mortaza.ebeid\documents\prog\c\wave-cryptography\wavecrypt\wave.h
@@ -59,14 +60,12 @@
 	<stdio.h>
 	"wave.h"
 
-1664527572 c:\users\mortaza.ebeid\documents\prog\c\wave-cryptography\wavecrypt\headerlogic.h
+1665560258 c:\users\mortaza.ebeid\documents\prog\c\wave-cryptography\wavecrypt\headerlogic.h
 	<stdio.h>
-	"headerStruct.h"
 
-1664525044 c:\users\mortaza.ebeid\documents\prog\c\wave-cryptography\wavecrypt\headerstruct.h
+1665561524 c:\users\mortaza.ebeid\documents\prog\c\wave-cryptography\wavecrypt\headerstruct.h
 
-1664726765 c:\users\mortaza.ebeid\documents\prog\c\wave-cryptography\wavecrypt\chacha.h
-	<stdio.h>
+1665561137 c:\users\mortaza.ebeid\documents\prog\c\wave-cryptography\wavecrypt\chacha.h
 	<stdint.h>
 
 1664735375 c:\users\theok\documents\programmering\wave-cryptography\wavecrypt\headerlogic.h
@@ -102,4 +101,25 @@
 1665045742 c:\users\theodor.kohler\documents\programmering\wave-cryptography\wavecrypt\hiddendataheaderstruct.h
 
 1665060866 c:\users\theodor.kohler\documents\programmering\wave-cryptography\wavecrypt\hiddenfile.h
+
+1665052980 c:\users\mortaza.ebeid\documents\prog\c\wave-cryptography\wavecrypt\encoder.h
+	<stdbool.h>
+
+1665052987 c:\users\mortaza.ebeid\documents\prog\c\wave-cryptography\wavecrypt\hiddendataheaderstruct.h
+
+1665062114 c:\users\mortaza.ebeid\documents\prog\c\wave-cryptography\wavecrypt\hiddenfile.h
+
+1665560265 source:c:\users\mortaza.ebeid\documents\prog\c\wave-cryptography\wavecrypt\headerlogic.c
+	"headerStruct.h"
+	"headerLogic.h"
+
+1665063560 c:\users\mortaza.ebeid\documents\prog\c\wave-cryptography\wavecrypt\headerlogic.c
+	"headerStruct.h"
+	<stdio.h>
+
+1665560364 source:c:\users\mortaza.ebeid\documents\prog\c\wave-cryptography\wavecrypt\chacha.c
+	"chacha.h"
+
+1665064180 c:\users\mortaza.ebeid\documents\prog\c\wave-cryptography\wavecrypt\chacha.c
+	"chacha.h"
 
