@@ -1,4 +1,5 @@
-
+#ifndef HIDDENDATAHEADERSTRUCT_H
+#define HIDDENDATAHEADERSTRUCT_H
 
 struct HiddenHeader {
     unsigned int ChunkSize;
@@ -9,3 +10,8 @@ struct HiddenHeader {
     unsigned char method
     unsigned int  Subchunk2Size;           // The length of the data encrypted in the wave file (excluding the header) in bytes
 };
+
+char * pReadInHiddenFile(FILE* pHiddenFile, char fileName);
+
+struct HIDDENDATAHEADER hiddenDataHeaderToStruct(char * pFilePath);
+#endif

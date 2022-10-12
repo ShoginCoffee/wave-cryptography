@@ -3,7 +3,7 @@
 #include <string.h>
 #include <stdio.h>
 #include "headerLogic.h"
-#include "headerStruct.h"
+#include "wavHeaderStruct.h"
 #include "chacha.h"
 //#include "encoder.h"
 //#include "hiddenDataHeaderStruct.h"
