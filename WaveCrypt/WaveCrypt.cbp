@@ -35,17 +35,21 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="chacha.h" />
-		<Unit filename="encoder.h" />
-		<Unit filename="headerLogic.c">
+		<Unit filename="encoder.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="headerLogic.h" />
-		<Unit filename="headerStruct.h" />
-		<Unit filename="hiddenDataHeaderStruct.h" />
-		<Unit filename="hiddenFile.h" />
+		<Unit filename="encoder.h" />
+		<Unit filename="hiddenHeaderStruct.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="hiddenHeaderStruct.h" />
 		<Unit filename="main.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="wavHeaderStruct.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="wavHeaderStruct.h" />
 		<Extensions>
 			<lib_finder disable_auto="1" />
 		</Extensions>
