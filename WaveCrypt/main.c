@@ -2,8 +2,8 @@
 #include <stdint.h>
 #include <string.h>
 #include <stdio.h>
-#include "headerLogic.h"
-#include "wavHeaderStruct.h"
+#include "wavHeader.h"
+#include "hiddenHeader.h"
 #include "chacha.h"
 //#include "encoder.h"
 //#include "hiddenDataHeaderStruct.h"
@@ -136,6 +136,7 @@ int main(){
     for(int i= 0; i<204; i++){
         printf("a");
     }
+
 
 
 

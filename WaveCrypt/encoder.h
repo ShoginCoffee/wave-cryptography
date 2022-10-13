@@ -1,5 +1,5 @@
-#ifndef WAVHEADERSTRUCT_H
-#define WAVHEADERSTRUCT_H
+#ifndef WAVHEADER_H
+#define WAVHEADER_H
 #include <stdbool.h>
 
 

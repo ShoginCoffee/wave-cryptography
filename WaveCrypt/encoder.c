@@ -1,9 +1,9 @@
-#ifndef WAVHEADERSTRUCT_H
-#define WAVHEADERSTRUCT_H
+#ifndef WAVHEADER_H
+#define WAVHEADER_H
 #include <stdbool.h>
 
 
-char * pReadInWaveData(FILE* pWavOriginal, struct HEADER header)
+char * pReadInWaveData(FILE *pWavOriginal, struct HEADER header)
 {
     char waveData = malloc(header.Subchunk2Size);
     char * pWaveData = &waveData;
@@ -12,7 +12,7 @@ char * pReadInWaveData(FILE* pWavOriginal, struct HEADER header)
     return pWaveData;
 }
 
-char changeBits(char whichBits, char byte, bool bit)
+char changeBits(char whichBits, char bitValues, char *byte)
 {
     //All other bits configuration except 1 are work in progress
     switch(whichBits)
