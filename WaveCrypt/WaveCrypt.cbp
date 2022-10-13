@@ -39,17 +39,17 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="encoder.h" />
-		<Unit filename="hiddenHeaderStruct.c">
+		<Unit filename="hiddenHeader.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="hiddenHeaderStruct.h" />
+		<Unit filename="hiddenHeader.h" />
 		<Unit filename="main.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="wavHeaderStruct.c">
+		<Unit filename="wavHeader.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="wavHeaderStruct.h" />
+		<Unit filename="wavHeader.h" />
 		<Extensions>
 			<lib_finder disable_auto="1" />
 		</Extensions>
