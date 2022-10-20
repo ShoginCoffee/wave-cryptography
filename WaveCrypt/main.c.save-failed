@@ -129,13 +129,12 @@ int main(){
 
 
 
-    // print header
-    FILE *pWavOriginal = fopen("../AudioFiles/BabyElephantWalk60.wav", "rb");
+    /* print header
+    FILE* pWavOriginal = fopen("../AudioFiles/BabyElephantWalk60.wav", "rb");
     struct WavHeader wavHeader = headerToStruct(pWavOriginal);
+    */
 
-    FILE *pHiddenDataOriginal = fopen("/demo.txt", "rb");
 
-    HiddenHeader hiddenHeader = hiddenHeaderToStruct(pHiddenDataOriginal, sizeof())
 
 
     /*

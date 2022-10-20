@@ -1,7 +1,7 @@
-#ifndef WAVHEADER_H
-#define WAVHEADER_H
+#ifndef ENCODER_H
+#define ENCODER_H
 #include <stdbool.h>
-
+#include <stdio.h>
 
 char * pReadInWaveData(FILE* pWavOriginal, struct HEADER header);
 

@@ -1,13 +1,13 @@
-#ifndef WAVHEADER_H
-#define WAVHEADER_H
 #include <stdbool.h>
+#include <stdio.h>
+#include "wavHeader.h"
 
 
-char * pReadInWaveData(FILE *pWavOriginal, struct HEADER header)
+char * pReadInWaveData(FILE *pWavOriginal, struct WavHeader wavHeader)
 {
-    char waveData = malloc(header.Subchunk2Size);
-    char * pWaveData = &waveData;
-    fread(pWaveData, header.Subchunk2Size, 1, pWavOriginal);
+    char waveData = malloc(wavHeader.subChunk2Size);
+    char *pWaveData = &waveData;
+    fread(pWaveData, wavHeader.subChunk2Size, 1, pWavOriginal);
 
     return pWaveData;
 }
@@ -20,12 +20,12 @@ char changeBits(char whichBits, char bitValues, char *byte)
     //Last 1 bit
     case 1:
         //Is last bit true?
-        switch(byte & 1) {
+        /*switch(bitValues & 1) {
         case 0:
             return (bit) ? 1 : 0;
         case 1:
             return (bit) ? 0 : 1;
-        }
+        }*/
         break;
     //Last 2 bits
     case 3:
@@ -54,5 +54,4 @@ char changeBits(char whichBits, char bitValues, char *byte)
         break;
     }
 }
-#endif
 

@@ -18,13 +18,13 @@
 
 1663766747 4a67638ae70359eed38504318bd6b0c1fa570
 
-1665562743 source:c:\users\theodor.kohler\documents\programmering\wave-cryptography\wavecrypt\main.c
+1666271561 source:c:\users\theodor.kohler\documents\programmering\wave-cryptography\wavecrypt\main.c
 	<stdlib.h>
 	<stdint.h>
 	<string.h>
 	<stdio.h>
-	"headerLogic.h"
-	"headerStruct.h"
+	"wavHeader.h"
+	"hiddenHeader.h"
 	"chacha.h"
 
 1664207796 c:\users\theodor.kohler\documents\programmering\wave-cryptography\wavecrypt\wave.h
@@ -88,7 +88,7 @@
 
 1665045742 c:\users\theodor.kohler\documents\programmering\wave-cryptography\wavecrypt\headerstruct.h
 
-1665562743 c:\users\theodor.kohler\documents\programmering\wave-cryptography\wavecrypt\chacha.h
+1666272512 c:\users\theodor.kohler\documents\programmering\wave-cryptography\wavecrypt\chacha.h
 	<stdint.h>
 
 1665045742 c:\users\theodor.kohler\documents\programmering\wave-cryptography\wavecrypt\encoder.h
@@ -125,4 +125,19 @@
 1665562743 source:c:\users\theodor.kohler\documents\programmering\wave-cryptography\wavecrypt\headerlogic.c
 	"headerStruct.h"
 	"headerLogic.h"
+
+1666273143 c:\users\theodor.kohler\documents\programmering\wave-cryptography\wavecrypt\wavheader.h
+	<stdio.h>
+
+1666271812 c:\users\theodor.kohler\documents\programmering\wave-cryptography\wavecrypt\hiddenheader.h
+	<stdio.h>
+
+1666272653 source:c:\users\theodor.kohler\documents\programmering\wave-cryptography\wavecrypt\hiddenheader.c
+	"hiddenHeader.h"
+	<stdio.h>
+
+1666272770 source:c:\users\theodor.kohler\documents\programmering\wave-cryptography\wavecrypt\encoder.c
+	<stdbool.h>
+	<stdio.h>
+	"wavHeader.h"
 
