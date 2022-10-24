@@ -10,7 +10,7 @@ char *pReadInHiddenFile(FILE *pHiddenFile, char fileName) {
     return 0;
 }
 
-struct HiddenHeader hiddenHeaderToStruct(char *pFilePath, char *filePath,  int filePathLength, char *dataArray[], int dataArrayLength) {
+struct HiddenHeader hiddenHeaderToStruct(char *pFilePath, char filePath,  int filePathLength) {
     struct HiddenHeader hiddenHeader;
 
     char fileName[] = "demo";
@@ -18,12 +18,11 @@ struct HiddenHeader hiddenHeaderToStruct(char *pFilePath, char *filePath,  int f
 
     FILE *pDataFile = fopen(pFilePath, "rb");
     fseek(pDataFile, 0, SEEK_END);
-    long dataSize = ftell(pDataFile);
-    printf("DataSize: %d \n", dataSize);
+
 
     hiddenHeader.subChunk1Size = 267;
 
-    hiddenHeader.subChunk2Size = dataSize;
+    hiddenHeader.subChunk2Size = ftell(pDataFile);
 
     hiddenHeader.chunkSize = hiddenHeader.subChunk1Size + hiddenHeader.subChunk2Size;
 

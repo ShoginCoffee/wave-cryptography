@@ -14,5 +14,5 @@ struct HiddenHeader {
 
 char * pReadInHiddenFile(FILE* pHiddenFile, char fileName);
 
-struct HiddenHeader hiddenHeaderToStruct(char *pFilePath, int filePathLength, char *dataArray[], int dataArrayLength);
+struct HiddenHeader hiddenHeaderToStruct(char *pFilePath, char filePath,  int filePathLength);
 #endif

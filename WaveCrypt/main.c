@@ -6,8 +6,6 @@
 #include "hiddenHeader.h"
 #include "chacha.h"
 //#include "encoder.h"
-//#include "hiddenDataHeaderStruct.h"
-//#include "hiddenFile.h"
 
 void createNewWave(){
     FILE* pWavEncoded = fopen("../AudioFiles/wavEncoded.wav", "wb");
@@ -133,9 +131,12 @@ int main(){
     FILE *pWavOriginal = fopen("../AudioFiles/BabyElephantWalk60.wav", "rb");
     struct WavHeader wavHeader = headerToStruct(pWavOriginal);
 
-    FILE *pHiddenDataOriginal = fopen("/demo.txt", "rb");
 
-    HiddenHeader hiddenHeader = hiddenHeaderToStruct(pHiddenDataOriginal, sizeof())
+    char filePath[9] = "/demo.txt";
+
+    FILE *pHiddenDataOriginal = fopen(filePath, "rb");
+
+    struct HiddenHeader hiddenHeader = hiddenHeaderToStruct(pHiddenDataOriginal, filePath, sizeof(filePath));
 
 
     /*
