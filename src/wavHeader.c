@@ -29,7 +29,9 @@ unsigned char * intBEToCharLE (unsigned int num) {
 }
 
 // takes in file path and returns header struct
-struct WavHeader headerToStruct(FILE* pWavOriginal) {
+struct WavHeader headerToStruct(char* pFilepath) {
+    FILE* pWavOriginal = fopen(pFilepath, "rb");
+
     unsigned char buffer4[4];
     unsigned char buffer2[2];
 

@@ -1,39 +1,30 @@
 #include "hiddenHeader.h"
 #include <stdio.h>
 
-char *pReadInHiddenFile(FILE *pHiddenFile, char fileName) {
-    fseek(pHiddenFile, 0L, SEEK_END);
-    int hiddenFileSize = ftell(pHiddenFile);
-    //printf("SIZE: %d\n", hiddenFileSize);
-    //waveDataWithHiddenFile = malloc() //Storleken av vår egna heder beror på filnamnets längd? Hur gör vi?
+struct HiddenHeader hiddenHeaderToStruct(char* pFilepath, char filePath, int filePathLength) {
+	struct HiddenHeader hiddenHeader;
 
-    return 0;
-}
+	char fileName[] = "demo";
+	char fileExtension[] = "txt";
 
-struct HiddenHeader hiddenHeaderToStruct(char *pFilePath, char filePath,  int filePathLength) {
-    struct HiddenHeader hiddenHeader;
-
-    char fileName[] = "demo";
-    char fileExtension[] = "txt";
-
-    FILE *pDataFile = fopen(pFilePath, "rb");
-    fseek(pDataFile, 0, SEEK_END);
+	FILE* pDataFile = fopen(pFilepath, "rb");
+	fseek(pDataFile, 0, SEEK_END);
 
 
-    hiddenHeader.subChunk1Size = 267;
+	hiddenHeader.subChunk1Size = 267;
 
-    hiddenHeader.subChunk2Size = ftell(pDataFile);
+	hiddenHeader.subChunk2Size = ftell(pDataFile);
 
-    hiddenHeader.chunkSize = hiddenHeader.subChunk1Size + hiddenHeader.subChunk2Size;
+	hiddenHeader.chunkSize = hiddenHeader.subChunk1Size + hiddenHeader.subChunk2Size;
 
-    hiddenHeader.fileNameLength = sizeof(fileName);
+	hiddenHeader.fileNameLength = sizeof(fileName);
 
-    memcpy(&hiddenHeader.fileName, &fileName, sizeof(fileName));
+	memcpy(&hiddenHeader.fileName, &fileName, sizeof(fileName));
 
-    memcpy(&hiddenHeader.fileExtension, &fileExtension, sizeof(fileExtension));
+	memcpy(&hiddenHeader.fileExtension, &fileExtension, sizeof(fileExtension));
 
-    hiddenHeader.encryptionMethod = 1;
+	hiddenHeader.encryptionMethod = 1;
 
-    return hiddenHeader;
+	return hiddenHeader;
 }
 
