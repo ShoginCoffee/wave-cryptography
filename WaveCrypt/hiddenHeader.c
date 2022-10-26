@@ -1,6 +1,5 @@
 #include "hiddenHeader.h"
-#ifndef HIDDENHEADER_H
-#define HIDDENHEADER_H
+#include <stdio.h>
 
 char *pReadInHiddenFile(FILE *pHiddenFile, char fileName) {
     fseek(pHiddenFile, 0L, SEEK_END);
@@ -11,31 +10,30 @@ char *pReadInHiddenFile(FILE *pHiddenFile, char fileName) {
     return 0;
 }
 
-struct HiddenHeader hiddenHeaderToStruct(char *pFilePath, int filePathLength, char *dataArray[], int dataArrayLength) {
+struct HiddenHeader hiddenHeaderToStruct(char *pFilePath, char filePath,  int filePathLength) {
     struct HiddenHeader hiddenHeader;
 
     char fileName[] = "demo";
     char fileExtension[] = "txt";
 
+    FILE *pDataFile = fopen(pFilePath, "rb");
+    fseek(pDataFile, 0, SEEK_END);
+
+
+    hiddenHeader.subChunk1Size = 267;
+
+    hiddenHeader.subChunk2Size = ftell(pDataFile);
+
+    hiddenHeader.chunkSize = hiddenHeader.subChunk1Size + hiddenHeader.subChunk2Size;
+
     hiddenHeader.fileNameLength = sizeof(fileName);
 
-    memcpy(&hiddenHeader.Filename, &fileName, sizeof(fileName));
+    memcpy(&hiddenHeader.fileName, &fileName, sizeof(fileName));
 
     memcpy(&hiddenHeader.fileExtension, &fileExtension, sizeof(fileExtension));
 
-    hiddenHead
-
-
-
-    FILE *pDataFile = fopen(pFilePath, "rb");
-    fseek(pDataFile, 0, SEEK_END);
-    long dataSize = ftell(pDataFile);
-    printf("DataSize: %d \n", dataSize);
-
-    hiddenHeader.Subchunk1Size = 6 + sizeof(fileName);
-    hiddenHeader.Subchunk2Size = ftell(pDataFile);
+    hiddenHeader.encryptionMethod = 1;
 
     return hiddenHeader;
 }
 
-#endif

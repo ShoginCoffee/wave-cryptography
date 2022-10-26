@@ -50,14 +50,14 @@ struct WavHeader headerToStruct(FILE* pWavOriginal) {
     bytesRead = fread(header.format, sizeof(header.format), 1, pWavOriginal);
     printf("Format: %.4s \n", header.format);
 
-    // Subchunk1ID 4 byte BE
-    bytesRead = fread(header.subchunk1ID, sizeof(header.subchunk1ID), 1, pWavOriginal);
-    printf("Subchunk1ID: %.4s \n", header.subchunk1ID);
+    // SubChunk1ID 4 byte BE
+    bytesRead = fread(header.subChunk1ID, sizeof(header.subChunk1ID), 1, pWavOriginal);
+    printf("Subchunk1ID: %.4s \n", header.subChunk1ID);
 
-    // Subchunk1Size 4 byte LE converted to BE
+    // SubChunk1Size 4 byte LE converted to BE
     bytesRead = fread(buffer4, sizeof(buffer4), 1, pWavOriginal);
-    header.subchunk1Size = charLEToIntBE(buffer4);
-    printf("Subchunk1Size: %u \n", header.subchunk1Size);
+    header.subChunk1Size = charLEToIntBE(buffer4);
+    printf("Subchunk1Size: %u \n", header.subChunk1Size);
 
     // AudioFormat 2 byte LE converted to BE
     bytesRead = fread(buffer2, sizeof(buffer2), 1, pWavOriginal);
@@ -89,14 +89,14 @@ struct WavHeader headerToStruct(FILE* pWavOriginal) {
     header.bitsPerSample = charLEToIntBE(buffer2);
     printf("BitsPerSample: %u \n", header.bitsPerSample);
 
-    // Subchunk2ID 4 byte BE
-    bytesRead = fread(header.subchunk2ID, sizeof(header.subchunk2ID), 1, pWavOriginal);
-    printf("Subchunk2ID: %.4s \n", header.subchunk2ID);
+    // SubChunk2ID 4 byte BE
+    bytesRead = fread(header.subChunk2ID, sizeof(header.subChunk2ID), 1, pWavOriginal);
+    printf("Subchunk2ID: %.4s \n", header.subChunk2ID);
 
-    // Subchunk2Size 4 byte LE converted to BE
+    // SubChunk2Size 4 byte LE converted to BE
     bytesRead = fread(buffer4, sizeof(buffer4), 1, pWavOriginal);
-    header.subchunk2Size = charLEToIntBE(buffer4);
-    printf("Subchunk2Size: %u \n", header.subchunk2Size);
+    header.subChunk2Size = charLEToIntBE(buffer4);
+    printf("Subchunk2Size: %u \n", header.subChunk2Size);
 
     fclose(pWavOriginal);
     return header;

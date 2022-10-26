@@ -4,15 +4,17 @@
 
 struct HiddenHeader {
     unsigned int chunkSize;
-    unsigned int subchunk1Size;           // The length of the header in bytes
-    unsigned int fileNameLength;
-    char fileName[244];                     // FilePath + FileName + FileExtension = 247. 247 - "C:\" = 244
-    char fileExtension[6];
-    unsigned char encryptionMethod;
-    unsigned int  subchunk2Size;           // The length of the data encrypted in the wave file (excluding the header) in bytes
+    unsigned int subChunk1Size;             // Size of metadata subChunk, The length of the header in bytes
+    unsigned int fileNameLength;            // Length of filename in bytes
+    char fileName[244];                     // (without fileExtension) FilePath + FileName + FileExtension = 247 max. 247 - "C:\" = 244
+    char fileExtension[10];                 // File extension name stored as string
+    // ska vi ha encryption method? om den är krypterad är det lite svårt att veta...
+    // (vi kan ha det i första första början av filen okrypterad, sen kommer allt annat)
+    unsigned char encryptionMethod;         // Type of encryption. 0 = no encryption, 1 = CHACHA20
+    unsigned int  subChunk2Size;            // The length of the data encrypted in the wave file (excluding the header) in bytes
 };
 
 char * pReadInHiddenFile(FILE* pHiddenFile, char fileName);
 
-struct HiddenHeader hiddenHeaderToStruct(char * pFilePath);
+struct HiddenHeader hiddenHeaderToStruct(char *pFilePath, char filePath,  int filePathLength);
 #endif

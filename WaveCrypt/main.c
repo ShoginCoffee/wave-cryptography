@@ -7,8 +7,7 @@
 #include "chacha.h"
 #include "menuGUI.h"
 #include "encoder.h"
-//#include "hiddenDataHeaderStruct.h"
-//#include "hiddenFile.h"
+
 
 void createNewWave(){
     FILE* pWavEncoded = fopen("../AudioFiles/wavEncoded.wav", "wb");
@@ -22,13 +21,13 @@ void printb(char binary){
 }
 
 int main(){
-    //meenu
-    int nothing = GUIMenu();
+    // GUI menu
+    //int nothing = GUIMenu();
 
 
-
-    /* print header
-    FILE* pWavOriginal = fopen("../AudioFiles/BabyElephantWalk60.wav", "rb");
+    /*
+    // print header
+    FILE *pWavOriginal = fopen("../AudioFiles/BabyElephantWalk60.wav", "rb");
     struct WavHeader wavHeader = headerToStruct(pWavOriginal);
     */
 
@@ -37,6 +36,8 @@ int main(){
     // encoder
     unsigned char data[16] = {[0 ... 15] = 0x00};
     unsigned char message[] = {0xff, 0xff};
+    int sampleSize = 2;
+    int bitsPerByte = 2;
 
     printf("input data: \n");
     for(int i = 0; i < sizeof(data); i++){
@@ -45,7 +46,17 @@ int main(){
     }
     printf("\n");
 
-    encodeMessage(&data, sizeof(data), 2, 2, &message, 2);
+    printf("input message: \n");
+    for(int i = 0; i < sizeof(message); i++){
+        printb(message[i]);
+        printf("\n");
+    }
+    printf("\n");
+
+    printf("sample size: %d \n", sampleSize);
+    printf("bits per byte: %d \n\n", bitsPerByte);
+
+    encodeMessage(&data, sizeof(data), sampleSize, bitsPerByte, &message, sizeof(message));
 
 
     printf("output data: \n");
@@ -53,6 +64,16 @@ int main(){
         printb(data[i]);
         printf("\n");
     }
+    */
+
+
+    /*
+    // Theo Stuff (THEO! namnge vad den sektionen gör.)
+    char filePath[9] = "/demo.txt";
+
+    FILE *pHiddenDataOriginal = fopen(filePath, "rb");
+
+    struct HiddenHeader hiddenHeader = hiddenHeaderToStruct(pHiddenDataOriginal, filePath, sizeof(filePath));
     */
 
 
