@@ -2,7 +2,12 @@
 #define CHACHA_H
 #include <stdint.h>
 
-struct Block;
+struct Block {
+    uint32_t row1[4];
+    uint32_t row2[4];
+    uint32_t row3[4];
+    uint32_t row4[4];
+};
 
 void quarterRound(uint32_t *a, uint32_t *b, uint32_t *c, uint32_t *d);
 

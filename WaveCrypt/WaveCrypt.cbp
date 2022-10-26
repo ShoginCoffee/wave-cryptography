@@ -46,6 +46,10 @@
 		<Unit filename="main.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="menuGUI.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="menuGUI.h" />
 		<Unit filename="wavHeader.c">
 			<Option compilerVar="CC" />
 		</Unit>
