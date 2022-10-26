@@ -1,0 +1,12 @@
+# ninja log v5
+6	375	6885249172008836	CMakeFiles/wave-cryptography.dir/main.c.obj	4214c2bfb76aa8be
+1	390	6885249172008836	CMakeFiles/wave-cryptography.dir/src/chacha.c.obj	4c3c6c08b0c5fab2
+10	393	6885249172098117	CMakeFiles/wave-cryptography.dir/src/menuGUI.c.obj	f50a78d201095c48
+20	395	6885249171984038	CMakeFiles/wave-cryptography.dir/src/encoder.c.obj	a0d42e63f0270103
+13	396	6885249172177470	CMakeFiles/wave-cryptography.dir/src/hiddenHeader.c.obj	835903b26d7bf304
+29	398	6885249172192353	CMakeFiles/wave-cryptography.dir/src/wavHeader.c.obj	bc3d17dd481e092f
+400	787	6885249176011561	wave-cryptography.exe	bd7cce34dfe86437
+1	291	6885251560807585	CMakeFiles/wave-cryptography.dir/main.c.obj	4214c2bfb76aa8be
+292	473	6885251562256041	wave-cryptography.exe	bd7cce34dfe86437
+1	85	6885251832157279	CMakeFiles/wave-cryptography.dir/main.c.obj	4214c2bfb76aa8be
+86	247	6885251833427469	wave-cryptography.exe	bd7cce34dfe86437
