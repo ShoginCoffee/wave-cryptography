@@ -1,8 +1,8 @@
-#ifndef HIDDENHEADER_H
-#define HIDDENHEADER_H
+#ifndef MESSAGEHEADER_H
+#define MESSAGEHEADER_H
 #include <stdio.h>
 
-struct HiddenHeader {
+struct MessageHeader {
 	unsigned int chunkSize;
 	unsigned int subChunk1Size;             // Size of metadata subChunk, The length of the header in bytes
 	unsigned int fileNameLength;            // Length of filename in bytes
@@ -14,5 +14,5 @@ struct HiddenHeader {
 	unsigned int  subChunk2Size;            // The length of the data encrypted in the wave file (excluding the header) in bytes
 };
 
-struct HiddenHeader hiddenHeaderToStruct(char* pFilepath, char filePath, int filePathLength);
+struct MessageHeader MessageHeaderToStruct(char* pFilepath, char filePath, int filePathLength);
 #endif

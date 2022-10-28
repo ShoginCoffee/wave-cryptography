@@ -3,10 +3,11 @@
 #include <string.h>
 #include <stdio.h>
 #include "wavHeader.h"
-#include "hiddenHeader.h"
+#include "messageHeader.h"
 #include "chacha.h"
 #include "menuGUI.h"
 #include "encoder.h"
+#include "util.h"
 
 
 void createNewWave() {
@@ -27,8 +28,16 @@ int main() {
 
 	
 	// print header
-	char filepath = "audiofiles/babyelephantwalk60.wav";
-	struct WavHeader wavHeader = headerToStruct(filepath);
+	char targetFilepath[] = "../../../AudioFiles/BabyElephantWalk60.wav"; //Change to real location after compiling code
+	FILE* pWavOriginal = fopen(targetFilepath, "rb");
+	struct WavHeader targetHeader = headerToStruct(targetFilepath);
+
+	char messageFilepath[] = "../../../demo.txt";
+	char* pMessageData = readInMessageData(messageFilepath);
+	int messageDataLength = fileLength(messageFilepath);
+
+	//char* pTargetData = readInTargetData(targetFilepath, targetHeader.subChunk2Size);
+	//int targetDataLength = fileLength(targetFilepath);
 	
 
 
@@ -113,6 +122,7 @@ int main() {
 	}
 	*/
 
-
+	//free(pMessageData);
+	//free(pTargetData);
 	return 0;
 }

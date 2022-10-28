@@ -1,8 +1,9 @@
 #include <stdio.h>
 #include "encoder.h"
 #include "wavHeader.h"
+#include "util.h"
 
-void encodeMessage(char* data, unsigned int dataLength, int sampleSize, int bitsPerByte, char* message, unsigned int messageLength) {
+void encodeMessage(char* targetData, int sampleSize, int bitsPerByte, char* message, unsigned int messageLength) {
 	// SIDENOTE: DEBUG PRINTF ARE COMMENTED OUT BUT ARE STILL IN THE FUNCTION, REMOVE WHEN NECESSARY.
 	int i = sampleSize - 1;
 	int t;
@@ -19,7 +20,7 @@ void encodeMessage(char* data, unsigned int dataLength, int sampleSize, int bits
 			bit = ((*(message + messageByte) << messageBit) & 0xff) >> 7;
 			//printf("bit to encode: %d \n\n", bit);
 			// 2. encode bit in data
-			encodeBitInByte((data + i), bit, t);
+			encodeBitInByte((targetData + i), bit, t);
 			// 3. update messageData counters
 			if (messageBit + 1 == 8) messageByte++;
 			messageBit = (messageBit + 1) % 8;
@@ -39,22 +40,22 @@ void encodeBitInByte(unsigned char* byte, int bit, int positionInByte) {
 	*(byte) = (byteCopy & ~(1 << positionInByte)) | (bit << positionInByte);
 }
 
-char* pHiddenData(char* pFilepath) {
+char* readInMessageData(char* pFilepath) {
 	//Takes in the filepath and returns a pointer to an char array of the data
 
-	FILE* pHiddenFile = fopen(pFilepath, "rb");
+	FILE* pMessageFile = fopen(pFilepath, "rb");
+	int messageLength = fileLength(pFilepath);
 
+	char* pMessageData = (char*)malloc(messageLength);
 
-	fseek(pHiddenFile, 0, SEEK_END);
-	char* pHiddenData = (char*)malloc(ftell(pHiddenFile));
+	fread(pMessageData, messageLength, 1, pMessageFile);
 
-	fread(pHiddenData, ftell(pHiddenFile), 1, pHiddenFile); //Is it better to use ftell twice or to store ftell in an integer?
-
-	fclose(pHiddenFile);
-	return pHiddenData;
+	printf("FILE POINTER: %d", pMessageFile);
+	fclose(pMessageFile);
+	return pMessageData;
 }
 
-char* pWaveData(char* pFilepath, int subChunk2Size) {
+char* readInTargetData(char* pFilepath, int subChunk2Size) {
 	FILE* pWavOriginal = fopen(pFilepath, "rb");
 
 	char* pWavData = (char*)malloc(subChunk2Size);
@@ -66,3 +67,4 @@ char* pWaveData(char* pFilepath, int subChunk2Size) {
 	fclose(pWavOriginal);
 	return pWavData;
 }
+

@@ -1,0 +1,1 @@
+int fileLength(char* filepath);

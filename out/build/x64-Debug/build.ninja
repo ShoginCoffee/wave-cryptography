@@ -73,7 +73,7 @@ build CMakeFiles\wave-cryptography.dir\src\encoder.c.obj: C_COMPILER__wave-crypt
   TARGET_COMPILE_PDB = CMakeFiles\wave-cryptography.dir\
   TARGET_PDB = wave-cryptography.pdb
 
-build CMakeFiles\wave-cryptography.dir\src\hiddenHeader.c.obj: C_COMPILER__wave-cryptography_Debug C$:\Users\theok\Documents\Programmering\wave-cryptography\src\hiddenHeader.c || cmake_object_order_depends_target_wave-cryptography
+build CMakeFiles\wave-cryptography.dir\src\messageHeader.c.obj: C_COMPILER__wave-cryptography_Debug C$:\Users\theok\Documents\Programmering\wave-cryptography\src\messageHeader.c || cmake_object_order_depends_target_wave-cryptography
   FLAGS = /DWIN32 /D_WINDOWS /Zi /Ob0 /Od /RTC1 -MDd
   INCLUDES = -IC:\Users\theok\Documents\Programmering\wave-cryptography\include
   OBJECT_DIR = CMakeFiles\wave-cryptography.dir
@@ -97,6 +97,14 @@ build CMakeFiles\wave-cryptography.dir\src\wavHeader.c.obj: C_COMPILER__wave-cry
   TARGET_COMPILE_PDB = CMakeFiles\wave-cryptography.dir\
   TARGET_PDB = wave-cryptography.pdb
 
+build CMakeFiles\wave-cryptography.dir\src\util.c.obj: C_COMPILER__wave-cryptography_Debug C$:\Users\theok\Documents\Programmering\wave-cryptography\src\util.c || cmake_object_order_depends_target_wave-cryptography
+  FLAGS = /DWIN32 /D_WINDOWS /Zi /Ob0 /Od /RTC1 -MDd
+  INCLUDES = -IC:\Users\theok\Documents\Programmering\wave-cryptography\include
+  OBJECT_DIR = CMakeFiles\wave-cryptography.dir
+  OBJECT_FILE_DIR = CMakeFiles\wave-cryptography.dir\src
+  TARGET_COMPILE_PDB = CMakeFiles\wave-cryptography.dir\
+  TARGET_PDB = wave-cryptography.pdb
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target wave-cryptography
@@ -105,7 +113,7 @@ build CMakeFiles\wave-cryptography.dir\src\wavHeader.c.obj: C_COMPILER__wave-cry
 #############################################
 # Link the executable wave-cryptography.exe
 
-build wave-cryptography.exe: C_EXECUTABLE_LINKER__wave-cryptography_Debug CMakeFiles\wave-cryptography.dir\main.c.obj CMakeFiles\wave-cryptography.dir\src\chacha.c.obj CMakeFiles\wave-cryptography.dir\src\encoder.c.obj CMakeFiles\wave-cryptography.dir\src\hiddenHeader.c.obj CMakeFiles\wave-cryptography.dir\src\menuGUI.c.obj CMakeFiles\wave-cryptography.dir\src\wavHeader.c.obj
+build wave-cryptography.exe: C_EXECUTABLE_LINKER__wave-cryptography_Debug CMakeFiles\wave-cryptography.dir\main.c.obj CMakeFiles\wave-cryptography.dir\src\chacha.c.obj CMakeFiles\wave-cryptography.dir\src\encoder.c.obj CMakeFiles\wave-cryptography.dir\src\messageHeader.c.obj CMakeFiles\wave-cryptography.dir\src\menuGUI.c.obj CMakeFiles\wave-cryptography.dir\src\wavHeader.c.obj CMakeFiles\wave-cryptography.dir\src\util.c.obj
   FLAGS = /DWIN32 /D_WINDOWS /Zi /Ob0 /Od /RTC1 -MDd
   LINK_FLAGS = /machine:x64 /debug /INCREMENTAL /subsystem:console
   LINK_LIBRARIES = kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib
