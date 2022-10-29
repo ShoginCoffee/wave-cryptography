@@ -1,27 +1,45 @@
 #include "messageHeader.h"
 #include <stdio.h>
 #include "util.h"
+#include <string.h>
 
-struct MessageHeader MessageHeaderToStruct(char* pFilepath, char filePath, int filePathLength) {
-	struct MessageHeader messageHeader;
+struct MessageHeader createMessageHeaderStruct(char* pMessageFilepath, char* pMessageFilename, unsigned int messageFilenameLength) {
+	struct MessageHeader header;
+ 
+	// Finding FileExtension and its length
+ 	char* pMessageFileExtension = strrchr(pMessageFilename, 46) + 1;
+	unsigned int messageFileExtensionLength = messageFilenameLength - (pMessageFileExtension - pMessageFilename);
 
-	char fileName[] = "demo";
-	char fileExtension[] = "txt";
+	header.id = 119;
 
-	messageHeader.subChunk1Size = 267;
+	header.subChunk1Size = 18 + (messageFilenameLength - messageFileExtensionLength) + messageFileExtensionLength;
 
-	messageHeader.subChunk2Size = fileLength(pFilepath);
+	header.filenameLength = messageFilenameLength - messageFileExtensionLength - 1;
 
-	messageHeader.chunkSize = messageHeader.subChunk1Size + messageHeader.subChunk2Size;
+	memcpy(&header.filename, pMessageFilename, (messageFilenameLength - messageFileExtensionLength - 1));
 
-	messageHeader.fileNameLength = sizeof(fileName);
+	header.fileExtensionLength = messageFileExtensionLength;
 
-	memcpy(&messageHeader.fileName, &fileName, sizeof(fileName));
+	memcpy(&header.fileExtension, pMessageFileExtension, messageFileExtensionLength);
 
-	memcpy(&messageHeader.fileExtension, &fileExtension, sizeof(fileExtension));
+	header.encryptionMethod = 1;
 
-	messageHeader.encryptionMethod = 1;
+	header.subChunk2Size = fileLength(pMessageFilepath);
 
-	return messageHeader;
+	header.chunkSize = header.subChunk1Size + header.subChunk2Size - 5;
+
+	printf("id: %c\n", header.id);
+	printf("chunkSize: %d\n", header.chunkSize);
+	printf("subChunk1Size: %d\n", header.subChunk1Size);
+	printf("filenameLength: %d\n", header.filenameLength);
+	printf("filename: %s\n", header.filename);
+	printf("fileExtensionLength: %d\n", header.fileExtensionLength);
+	printf("fileExtension: %s\n", header.fileExtension);
+	printf("encryptionMethod: %d\n", header.encryptionMethod);
+	printf("subChunk2Size: %d\n", header.subChunk2Size);
+
+	printf("\n");
+
+	return header;
 }
 

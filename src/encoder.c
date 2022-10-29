@@ -44,27 +44,32 @@ char* readInMessageData(char* pFilepath) {
 	//Takes in the filepath and returns a pointer to an char array of the data
 
 	FILE* pMessageFile = fopen(pFilepath, "rb");
-	int messageLength = fileLength(pFilepath);
+	unsigned int messageLength = fileLength(pFilepath);
 
 	char* pMessageData = (char*)malloc(messageLength);
 
+	printf((messageLength == 0) ? "\nmessageLength is null" : "\nmessageLength is not null");
+	printf((pMessageData == 0) ? "\npMessageData is null" : "\npMessageData is not null");
+	printf((pMessageFile == NULL) ? "\npMessageFile is null" : "\npMessageFile is not null");
+
 	fread(pMessageData, messageLength, 1, pMessageFile);
 
-	printf("FILE POINTER: %d", pMessageFile);
+	printf((pMessageFile == NULL) ? "\npMessageFile is null" : "\npMessageFile is not null");
+
 	fclose(pMessageFile);
 	return pMessageData;
 }
 
 char* readInTargetData(char* pFilepath, int subChunk2Size) {
-	FILE* pWavOriginal = fopen(pFilepath, "rb");
+	FILE* pTargetFile = fopen(pFilepath, "rb");
 
-	char* pWavData = (char*)malloc(subChunk2Size);
+	char* pTargetData = (char*)malloc(subChunk2Size);
 	char buffer[44];
 
-	fread(buffer, 44, 1, pWavOriginal);
-	fread(pWavData, subChunk2Size, 1, pWavOriginal);
+	fread(buffer, 44, 1, pTargetFile);
+	fread(pTargetData, subChunk2Size, 1, pTargetFile);
 
-	fclose(pWavOriginal);
-	return pWavData;
+	fclose(pTargetFile);
+	return pTargetData;
 }
 

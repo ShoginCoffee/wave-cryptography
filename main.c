@@ -25,17 +25,25 @@ int main() {
 	// GUI menu
 	// int nothing = GUIMenu();
 
-
-	
-	// print header
-	char targetFilepath[] = "../../../AudioFiles/BabyElephantWalk60.wav"; //Change to real location after compiling code
-	FILE* pWavOriginal = fopen(targetFilepath, "rb");
-	struct WavHeader targetHeader = headerToStruct(targetFilepath);
-
+	// Filepaths
+	char targetFilepath[] = "../../../AudioFiles/BabyElephantWalk60.wav"; // !!! Change to real location after compiling code !!!
 	char messageFilepath[] = "../../../demo.txt";
-	char* pMessageData = readInMessageData(messageFilepath);
-	int messageDataLength = fileLength(messageFilepath);
 
+	// Find message file name and its length
+	char* pMessageFilename = strrchr(&messageFilepath, 47) + 1;
+	unsigned int messageFilenameLength = (sizeof(messageFilepath) / sizeof(messageFilepath[0])) - (pMessageFilename - &messageFilepath + 1);
+
+	// Read in target file and construct header 
+	struct WavHeader targetHeader = createTargetHeaderStruct(targetFilepath);
+
+	// Read in message file and construct header
+	struct MessageHeader messageHeader = createMessageHeaderStruct(messageFilepath, pMessageFilename, messageFilenameLength);
+
+	// Read in message file and message file length
+	char* pMessageData = readInMessageData(messageFilepath);
+	unsigned int messageDataLength = fileLength(messageFilepath);
+
+	// Read in target file and target file length
 	//char* pTargetData = readInTargetData(targetFilepath, targetHeader.subChunk2Size);
 	//int targetDataLength = fileLength(targetFilepath);
 	
