@@ -1,34 +1,57 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="C:\Users\theok\Documents\Programmering\wave-cryptography\main.c">
+    <ClCompile Include="C:\Users\mortaza.ebeid\Documents\prog\c\wave-cryptography\main.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\theok\Documents\Programmering\wave-cryptography\src\chacha.c">
+    <ClCompile Include="C:\Users\mortaza.ebeid\Documents\prog\c\wave-cryptography\src\chacha.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\theok\Documents\Programmering\wave-cryptography\src\encoder.c">
+    <ClCompile Include="C:\Users\mortaza.ebeid\Documents\prog\c\wave-cryptography\src\encoder.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\theok\Documents\Programmering\wave-cryptography\src\messageHeader.c">
+    <ClCompile Include="C:\Users\mortaza.ebeid\Documents\prog\c\wave-cryptography\src\messageHeader.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\theok\Documents\Programmering\wave-cryptography\src\menuGUI.c">
+    <ClCompile Include="C:\Users\mortaza.ebeid\Documents\prog\c\wave-cryptography\src\menuGUI.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\theok\Documents\Programmering\wave-cryptography\src\wavHeader.c">
+    <ClCompile Include="C:\Users\mortaza.ebeid\Documents\prog\c\wave-cryptography\src\wavHeader.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\theok\Documents\Programmering\wave-cryptography\src\util.c">
+    <ClCompile Include="C:\Users\mortaza.ebeid\Documents\prog\c\wave-cryptography\src\util.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="C:\Users\theok\Documents\Programmering\wave-cryptography\CMakeLists.txt" />
+    <ClInclude Include="C:\Users\mortaza.ebeid\Documents\prog\c\wave-cryptography\include\chacha.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\mortaza.ebeid\Documents\prog\c\wave-cryptography\include\encoder.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\mortaza.ebeid\Documents\prog\c\wave-cryptography\include\menuGUI.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\mortaza.ebeid\Documents\prog\c\wave-cryptography\include\messageHeader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\mortaza.ebeid\Documents\prog\c\wave-cryptography\include\util.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\mortaza.ebeid\Documents\prog\c\wave-cryptography\include\wavHeader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <CustomBuild Include="C:\Users\mortaza.ebeid\Documents\prog\c\wave-cryptography\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{A91C2935-9C72-33BD-A8D5-B56B378B17E5}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Source Files">
-      <UniqueIdentifier>{DFE0C71B-EEC8-3FB5-BB98-9A3BB08F0425}</UniqueIdentifier>
+      <UniqueIdentifier>{1973211D-28A6-3E62-821E-1224195CF83A}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

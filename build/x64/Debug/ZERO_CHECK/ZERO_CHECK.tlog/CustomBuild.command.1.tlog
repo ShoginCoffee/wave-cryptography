@@ -1,0 +1,10 @@
+^C:\USERS\MORTAZA.EBEID\DOCUMENTS\PROG\C\WAVE-CRYPTOGRAPHY\BUILD\CMAKEFILES\17C8627824DD5458163BA5CBDAD3C9A5\GENERATE.STAMP.RULE
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/mortaza.ebeid/Documents/prog/c/wave-cryptography -BC:/Users/mortaza.ebeid/Documents/prog/c/wave-cryptography/build --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file C:/Users/mortaza.ebeid/Documents/prog/c/wave-cryptography/build/wave-cryptography.sln
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
