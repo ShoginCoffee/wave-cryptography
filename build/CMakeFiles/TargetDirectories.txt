@@ -1,3 +1,0 @@
-C:/Users/mortaza.ebeid/Documents/prog/c/wave-cryptography/build/CMakeFiles/wave-cryptography.dir
-C:/Users/mortaza.ebeid/Documents/prog/c/wave-cryptography/build/CMakeFiles/ALL_BUILD.dir
-C:/Users/mortaza.ebeid/Documents/prog/c/wave-cryptography/build/CMakeFiles/ZERO_CHECK.dir
