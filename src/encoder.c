@@ -47,7 +47,7 @@ char* readInMessageData(char* pFilepath) {
 	unsigned int messageLength = fileLength(pFilepath);
 
 	char* pMessageData = (char*)malloc(messageLength);
-
+	
 	printf((messageLength == 0) ? "\nmessageLength is null" : "\nmessageLength is not null");
 	printf((pMessageData == 0) ? "\npMessageData is null" : "\npMessageData is not null");
 	printf((pMessageFile == NULL) ? "\npMessageFile is null" : "\npMessageFile is not null");

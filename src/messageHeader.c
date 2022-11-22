@@ -12,7 +12,7 @@ struct MessageHeader createMessageHeaderStruct(char* pMessageFilepath, char* pMe
 
 	header.id = 119;
 
-	header.subChunk1Size = 18 + (messageFilenameLength - messageFileExtensionLength) + messageFileExtensionLength;
+	header.subChunk1Size = 18 + (messageFilenameLength - messageFileExtensionLength) + messageFileExtensionLength; 
 
 	header.filenameLength = messageFilenameLength - messageFileExtensionLength - 1;
 

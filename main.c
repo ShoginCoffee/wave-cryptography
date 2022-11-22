@@ -2,6 +2,8 @@
 #include <stdint.h>
 #include <string.h>
 #include <stdio.h>
+#include <windows.h>
+
 #include "wavHeader.h"
 #include "messageHeader.h"
 #include "chacha.h"
@@ -22,31 +24,45 @@ void printb(char binary) {
 }
 
 int main() {
+	// fileAPI.h
+
+	WIN32_FIND_DATA fdfile;
+	HANDLE handle = NULL;
+
+
 	// GUI menu
 	// int nothing = GUIMenu();
 
 	// Filepaths
-	char targetFilepath[] = "../../../AudioFiles/BabyElephantWalk60.wav"; // !!! Change to real location after compiling code !!!
-	char messageFilepath[] = "../../../demo.txt";
+	
+	/*
+	char targetFilepath[] = "C:/Users/mortaza.ebeid/Documents/prog/c/wave-cryptography/AudioFiles/BabyElephantWalk60.wav"; // !!! Change to real location after compiling code !!!
+	char messageFilepath[] = "C:/Users/mortaza.ebeid/Documents/prog/c/wave-cryptography/demo.txt";
 
 	// Find message file name and its length
-	char* pMessageFilename = strrchr(&messageFilepath, 47) + 1;
-	unsigned int messageFilenameLength = (sizeof(messageFilepath) / sizeof(messageFilepath[0])) - (pMessageFilename - &messageFilepath + 1);
+	char* pMessageFilename = strrchr(&messageFilepath, '/') + 1;
+	unsigned int messageFilenameLength = sizeof(messageFilepath) - (pMessageFilename - &messageFilepath + 1);
+	printf("filename: %s \n", pMessageFilename);
+	printf("filename length: %u \n", messageFilenameLength);
+	*/
 
+	/*
 	// Read in target file and construct header 
-	struct WavHeader targetHeader = createTargetHeaderStruct(targetFilepath);
-
+	struct WavHeader targetHeader = createTargetHeaderStruct(&targetFilepath);
+	
+	
 	// Read in message file and construct header
 	struct MessageHeader messageHeader = createMessageHeaderStruct(messageFilepath, pMessageFilename, messageFilenameLength);
+	printf("%s", targetFilepath);
 
 	// Read in message file and message file length
-	char* pMessageData = readInMessageData(messageFilepath);
+	char* pMessageData = readInMessageData(&messageFilepath);
 	unsigned int messageDataLength = fileLength(messageFilepath);
 
 	// Read in target file and target file length
 	//char* pTargetData = readInTargetData(targetFilepath, targetHeader.subChunk2Size);
 	//int targetDataLength = fileLength(targetFilepath);
-	
+	*/
 
 
 	/*
