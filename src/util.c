@@ -3,6 +3,10 @@
 unsigned int fileLength(char* pFilepath) {
     FILE* pFile = fopen(pFilepath, "rb");
 
+    if (pFile == NULL) {
+        return 0;
+    }
+
 	fseek(pFile, 0, SEEK_END);
 	unsigned int fileLength = ftell(pFile);
 

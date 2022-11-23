@@ -3,43 +3,50 @@
 #include "util.h"
 #include <string.h>
 
-struct MessageHeader createMessageHeaderStruct(char* pMessageFilepath, char* pMessageFilename, unsigned int messageFilenameLength) {
-	struct MessageHeader header;
+struct MessageHeader* createMessageHeaderStruct(struct MessageHeader* pMessageHeader,char* pMessageFilepath, unsigned int messageFilepathLength) {
+	pMessageHeader->subChunk2Size = fileLength(pMessageFilepath);
+
+	if (pMessageHeader->subChunk2Size == NULL) {
+		printf("Message file couldn't be found at given filepath");
+		return NULL;
+	}
+
+	// Find message file name and its length
+	char* pMessageFilename = strrchr(pMessageFilepath, '/') + 1;
+	unsigned int messageFilenameLength = messageFilepathLength - (pMessageFilename - pMessageFilepath + 1);
  
 	// Finding FileExtension and its length
  	char* pMessageFileExtension = strrchr(pMessageFilename, 46) + 1;
 	unsigned int messageFileExtensionLength = messageFilenameLength - (pMessageFileExtension - pMessageFilename);
 
-	header.id = 119;
+	pMessageHeader->id = 119;
 
-	header.subChunk1Size = 18 + (messageFilenameLength - messageFileExtensionLength) + messageFileExtensionLength; 
+	pMessageHeader->subChunk1Size = 18 + messageFilenameLength + messageFileExtensionLength;
 
-	header.filenameLength = messageFilenameLength - messageFileExtensionLength - 1;
+	pMessageHeader->filenameLength = messageFilenameLength - messageFileExtensionLength - 1;
 
-	memcpy(&header.filename, pMessageFilename, (messageFilenameLength - messageFileExtensionLength - 1));
+	memcpy(&(pMessageHeader->filename), pMessageFilename, (messageFilenameLength - messageFileExtensionLength - 1));
 
-	header.fileExtensionLength = messageFileExtensionLength;
+	pMessageHeader->fileExtensionLength = messageFileExtensionLength;
 
-	memcpy(&header.fileExtension, pMessageFileExtension, messageFileExtensionLength);
+	memcpy(&(pMessageHeader->fileExtension), pMessageFileExtension, messageFileExtensionLength);
 
-	header.encryptionMethod = 1;
+	pMessageHeader->encryptionMethod = 1;
 
-	header.subChunk2Size = fileLength(pMessageFilepath);
+	pMessageHeader->chunkSize = pMessageHeader->subChunk1Size + pMessageHeader->subChunk2Size - 5;
 
-	header.chunkSize = header.subChunk1Size + header.subChunk2Size - 5;
-
-	printf("id: %c\n", header.id);
-	printf("chunkSize: %d\n", header.chunkSize);
-	printf("subChunk1Size: %d\n", header.subChunk1Size);
-	printf("filenameLength: %d\n", header.filenameLength);
-	printf("filename: %s\n", header.filename);
-	printf("fileExtensionLength: %d\n", header.fileExtensionLength);
-	printf("fileExtension: %s\n", header.fileExtension);
-	printf("encryptionMethod: %d\n", header.encryptionMethod);
-	printf("subChunk2Size: %d\n", header.subChunk2Size);
+	printf("id: %c\n", pMessageHeader->id);
+	printf("chunkSize: %d\n", pMessageHeader->chunkSize);
+	printf("subChunk1Size: %d\n", pMessageHeader->subChunk1Size);
+	printf("filenameLength: %d\n", pMessageHeader->filenameLength);
+	printf("filename: %s\n", pMessageHeader->filename);
+	printf("fileExtensionLength: %d\n", pMessageHeader->fileExtensionLength);
+	printf("fileExtension: %s\n", pMessageHeader->fileExtension);
+	printf("encryptionMethod: %d\n", pMessageHeader->encryptionMethod);
+	printf("subChunk2Size: %d\n", pMessageHeader->subChunk2Size);
 
 	printf("\n");
 
-	return header;
+	return pMessageHeader;
 }
 

@@ -40,33 +40,44 @@ void encodeBitInByte(unsigned char* byte, int bit, int positionInByte) {
 	*(byte) = (byteCopy & ~(1 << positionInByte)) | (bit << positionInByte);
 }
 
-char* readInMessageData(char* pFilepath) {
-	//Takes in the filepath and returns a pointer to an char array of the data
-
+//Takes in the filepath and returns a pointer to an char array of the data
+char* readInMessageData(char* pMessageData, char* pFilepath) {
 	FILE* pMessageFile = fopen(pFilepath, "rb");
-	unsigned int messageLength = fileLength(pFilepath);
 
-	char* pMessageData = (char*)malloc(messageLength);
+	if (pMessageFile == NULL) {
+		// If the pMessageFile is NULL then does that mean that it doesn't need to be closed?
+		printf("Message file couldn't be found at given filepath");
+		return NULL;
+	}
+
+	unsigned int messageLength = fileLength(pFilepath);
 	
+	/*
 	printf((messageLength == 0) ? "\nmessageLength is null" : "\nmessageLength is not null");
 	printf((pMessageData == 0) ? "\npMessageData is null" : "\npMessageData is not null");
 	printf((pMessageFile == NULL) ? "\npMessageFile is null" : "\npMessageFile is not null");
+	*/
 
 	fread(pMessageData, messageLength, 1, pMessageFile);
 
-	printf((pMessageFile == NULL) ? "\npMessageFile is null" : "\npMessageFile is not null");
+	// printf((pMessageFile == NULL) ? "\npMessageFile is null" : "\npMessageFile is not null");
 
 	fclose(pMessageFile);
 	return pMessageData;
 }
 
-char* readInTargetData(char* pFilepath, int subChunk2Size) {
+char* readInTargetData(char* pTargetData, char* pFilepath, int subChunk2Size) {
 	FILE* pTargetFile = fopen(pFilepath, "rb");
 
-	char* pTargetData = (char*)malloc(subChunk2Size);
-	char buffer[44];
+	if (pTargetFile == NULL) {
+		// If the pTargetFile is NULL then does that mean that it doesn't need to be closed?
+		printf("Target file couldn't be found at given filepath");
+		return NULL;
+	}
 
-	fread(buffer, 44, 1, pTargetFile);
+	char buffer[44];					
+	fread(buffer, 44, 1, pTargetFile); //Moving the "cursor" to where the data starts. There should be a better way of doing this...
+
 	fread(pTargetData, subChunk2Size, 1, pTargetFile);
 
 	fclose(pTargetFile);

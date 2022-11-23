@@ -21,5 +21,5 @@ struct WavHeader {
 	unsigned int subChunk2Size;             // 4LE data chunk size: NumSamples * NumChannels * BytesPerSample - (size of the next chunk that will be read)
 };
 
-struct WavHeader createTargetHeaderStruct(char* pTargetFilepath);
+struct WavvHeader* createTargetHeaderStruct(struct WavHeader* targetHeader, char* pTargetFilepath);
 #endif

@@ -5,8 +5,8 @@ void encodeMessage(char* targetData, int sampleSize, int bitsPerByte, char* mess
 
 void encodeBitInByte(unsigned char* byte, int bit, int positionInByte);
 
-char* readInMessageData(char* pFilepath);
+char* readInMessageData(char* pMessageData, char* pFilepath);
 
-char* readInTargetData(char* pFilepath, int subChunk2Size);
+char* readInTargetData(char* pTargetData, char* pFilepath, int subChunk2Size);
 
 #endif

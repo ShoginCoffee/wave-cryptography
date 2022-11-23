@@ -34,36 +34,30 @@ int main() {
 	// int nothing = GUIMenu();
 
 	// Filepaths
+	char targetFilepath[] = "C:/Users/theodor.kohler/Documents/Programmering/wave-cryptography/AudioFiles/BabyElephantWalk60.wav"; // !!! Change to real location after compiling code !!!
+	char messageFilepath[] = "C:/Users/theodor.kohler/Documents/Programmering/wave-cryptography/demo.txt";
 	
-	/*
-	char targetFilepath[] = "C:/Users/mortaza.ebeid/Documents/prog/c/wave-cryptography/AudioFiles/BabyElephantWalk60.wav"; // !!! Change to real location after compiling code !!!
-	char messageFilepath[] = "C:/Users/mortaza.ebeid/Documents/prog/c/wave-cryptography/demo.txt";
 
-	// Find message file name and its length
-	char* pMessageFilename = strrchr(&messageFilepath, '/') + 1;
-	unsigned int messageFilenameLength = sizeof(messageFilepath) - (pMessageFilename - &messageFilepath + 1);
-	printf("filename: %s \n", pMessageFilename);
-	printf("filename length: %u \n", messageFilenameLength);
-	*/
-
-	/*
 	// Read in target file and construct header 
-	struct WavHeader targetHeader = createTargetHeaderStruct(&targetFilepath);
+	struct WavHeader targetHeader;
+	createTargetHeaderStruct(&targetHeader, targetFilepath);
 	
 	
 	// Read in message file and construct header
-	struct MessageHeader messageHeader = createMessageHeaderStruct(messageFilepath, pMessageFilename, messageFilenameLength);
-	printf("%s", targetFilepath);
+	struct MessageHeader messageHeader;
+	createMessageHeaderStruct(&messageHeader, messageFilepath, sizeof(messageFilepath));
 
+	
 	// Read in message file and message file length
-	char* pMessageData = readInMessageData(&messageFilepath);
 	unsigned int messageDataLength = fileLength(messageFilepath);
+	char* pMessageData = (char*)malloc(messageDataLength);
+	readInMessageData(pMessageData, messageFilepath);
 
 	// Read in target file and target file length
-	//char* pTargetData = readInTargetData(targetFilepath, targetHeader.subChunk2Size);
-	//int targetDataLength = fileLength(targetFilepath);
-	*/
-
+	unsigned int targetDataLength = fileLength(targetFilepath);
+	char* pTargetData = (char*)malloc(targetDataLength);
+	readInTargetData(pTargetData, targetFilepath, targetHeader.subChunk2Size);
+	
 
 	/*
 	// encoder
@@ -98,17 +92,6 @@ int main() {
 		printf("\n");
 	}
 	*/
-
-
-	/*
-	// Theo Stuff (THEO! namnge vad den sektionen gör.)
-	char filePath[9] = "/demo.txt";
-
-	FILE *pHiddenDataOriginal = fopen(filePath, "rb");
-
-	struct HiddenHeader hiddenHeader = hiddenHeaderToStruct(pHiddenDataOriginal, filePath, sizeof(filePath));
-	*/
-
 
 
 	/*
