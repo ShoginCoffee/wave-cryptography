@@ -34,18 +34,26 @@ int main() {
 	// int nothing = GUIMenu();
 
 	// Filepaths
-	char targetFilepath[] = "C:/Users/theodor.kohler/Documents/Programmering/wave-cryptography/AudioFiles/BabyElephantWalk60.wav"; // !!! Change to real location after compiling code !!!
-	char messageFilepath[] = "C:/Users/theodor.kohler/Documents/Programmering/wave-cryptography/demo.txt";
+
+	/* Morti paths */
+	char targetFilepath[] = "C:/Users/mortaza.ebeid/Documents/prog/c/wave-cryptography/AudioFiles/BabyElephantWalk60.wav"; // !!! Change to real location after compiling code !!!
+	char messageFilepath[] = "C:/Users/mortaza.ebeid/Documents/prog/c/wave-cryptography/demo.txt";
 	
 
-	// Read in target file and construct header 
+	/* Theo Paths 
+	char targetFilepath[] = "C:/Users/theodor.kohler/Documents/Programmering/wave-cryptography/AudioFiles/BabyElephantWalk60.wav"; // !!! Change to real location after compiling code !!!
+	char messageFilepath[] = "C:/Users/theodor.kohler/Documents/Programmering/wave-cryptography/demo.txt";
+	*/
+
+	// Read in target file and construct header
 	struct WavHeader targetHeader;
 	createTargetHeaderStruct(&targetHeader, targetFilepath);
 	
-	
+
 	// Read in message file and construct header
 	struct MessageHeader messageHeader;
 	createMessageHeaderStruct(&messageHeader, messageFilepath, sizeof(messageFilepath));
+	printMessageHeaderStruct(&messageHeader);
 
 	
 	// Read in message file and message file length

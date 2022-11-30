@@ -16,5 +16,7 @@ struct MessageHeader {
 	unsigned int  subChunk2Size;            // The length of the data encrypted in the wave file (excluding the header) in bytes
 };
 
-struct MessageHeader* createMessageHeaderStruct(struct MessageHeader* pMessageHeader, char* pMessageFilepath, unsigned int messageFilepathLength);
+int createMessageHeaderStruct(struct MessageHeader* pMessageHeader, char* pMessageFilepath, unsigned int messageFilepathLength);
+
+int printMessageHeaderStruct(struct MessageHeader* pMessageHeader);
 #endif
