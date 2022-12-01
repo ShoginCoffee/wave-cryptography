@@ -69,22 +69,13 @@ int listDirectoryContents(char* sDir) {
 
 
 int main() {
-
-	/* Get the directory where the executable is located
-	char string[255];
-	GetCurrentDirectory(255, &string);
-	printf("%s\n", string);
-	*/
-
 	
-	/* List Directories */
+	/* List Directories
 	
 	//char path[] = "C:/Users/mortaza.ebeid/Documents/prog/c/wave-cryptography";
-	//char path[] = "C:/Users/theodor.kohler/Documents/Programmering/wave-cryptography";
-	//char path[] = "C:/Users/theok/Documents/Programmering/wave-cryptography";
-	char path[] = ".";
-	//listDirectoryContents(path);
-
+	char path[] = "C:/Users/theodor.kohler/Documents/Programmering/wave-cryptography/demo.txt";
+	listDirectoryContents(path);
+	*/
 
 
 	// GUI menu
@@ -95,30 +86,20 @@ int main() {
 	// Filepaths
 
 	/* Morti paths 
-	char targetFilepath[] = "C:/Users/mortaza.ebeid/Documents/prog/c/wave-cryptography/AudioFiles/BabyElephantWalk60.wav"; // !!! Change to real location after compiling code !!!
+	char containerFilepath[] = "C:/Users/mortaza.ebeid/Documents/prog/c/wave-cryptography/AudioFiles/BabyElephantWalk60.wav"; // !!! Change to real location after compiling code !!!
 	char messageFilepath[] = "C:/Users/mortaza.ebeid/Documents/prog/c/wave-cryptography/demo.txt";
 	*/
 
-	/* Theo (Laptop) Paths 
-	char targetFilepath[] = "C:/Users/theodor.kohler/Documents/Programmering/wave-cryptography/AudioFiles/BabyElephantWalk60.wav"; // !!! Change to real location after compiling code !!!
+	/* Theo Paths */
+	char containerFilepath[] = "C:/Users/theodor.kohler/Documents/Programmering/wave-cryptography/AudioFiles/BabyElephantWalk60.wav"; // !!! Change to real location after compiling code !!!
 	char messageFilepath[] = "C:/Users/theodor.kohler/Documents/Programmering/wave-cryptography/demo.txt";
-	*/
-	/* Theo (Desktop) Paths 
-	char targetFilepath[] = "C:/Users/theok/Documents/Programmering/wave-cryptography/AudioFiles/BabyElephantWalk60.wav"; // !!! Change to real location after compiling code !!!
-	char messageFilepath[] = "C:/Users/theok/Documents/Programmering/wave-cryptography/demo.txt";
-	*/
-
-	char targetFilepath[] = "../AudioFiles/BabyElephantWalk60.wav"; // !!! Change to real location after compiling code !!!
-	char messageFilepath[] = "../demo.txt";
 	
 
-
-	/* Make WAV structand Message struct
+	/* Make WAV struct and Message struct
 	
 	// Read in target file and construct header
-	struct WavHeader targetHeader;
-	createTargetHeaderStruct(&targetHeader, targetFilepath);
-	printTargetHeaderStruct(&targetHeader);
+	struct WavHeader containerHeader;
+	createContainerHeaderStruct(&containerHeader, containerFilepath);
 	
 
 	// Read in message file and construct header
@@ -128,7 +109,7 @@ int main() {
 	*/
 
 	
-	/* Read messageand target file
+	/* Read message and target file
 	
 	// Read in message file and message file length
 	unsigned int messageDataLength = fileLength(messageFilepath);
