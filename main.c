@@ -11,6 +11,9 @@
 #include "encoder.h"
 #include "util.h"
 
+#define LIGHTBLUE_TEXT "\033[34;1m"
+#define RESET_COLOR "\033[0m"
+
 
 void createNewWave() {
 	FILE* pWavEncoded = fopen("../AudioFiles/wavEncoded.wav", "wb");
@@ -22,9 +25,6 @@ void printb(char binary) {
 		printf("%x", ((binary << i) & 0xff) >> 7);
 	}
 }
-
-#define LIGHTBLUE_TEXT "\033[34;1m"
-#define RESET_COLOR "\033[0m"
 
 int listDirectoryContents(char* sDir) {
 	WIN32_FIND_DATA fdFile;
