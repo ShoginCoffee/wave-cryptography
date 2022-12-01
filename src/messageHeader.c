@@ -7,7 +7,7 @@ int createMessageHeaderStruct(struct MessageHeader* pMessageHeader,char* pMessag
 	pMessageHeader->subChunk2Size = fileLength(pMessageFilepath);
 
 	if (pMessageHeader->subChunk2Size == NULL) {
-		printf("Message file couldn't be found at given filepath");
+		printf("Message file couldn't be found at given filepath\n");
 		return NULL;
 	}
 

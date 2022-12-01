@@ -69,12 +69,21 @@ int listDirectoryContents(char* sDir) {
 
 
 int main() {
+
+	/* Get the directory where the executable is located
+	char string[255];
+	GetCurrentDirectory(255, &string);
+	printf("%s\n", string);
+	*/
+
 	
 	/* List Directories */
 	
 	//char path[] = "C:/Users/mortaza.ebeid/Documents/prog/c/wave-cryptography";
-	char path[] = "C:/Users/theodor.kohler/Documents/Programmering/wave-cryptography/demo.txt";
-	listDirectoryContents(path);
+	//char path[] = "C:/Users/theodor.kohler/Documents/Programmering/wave-cryptography";
+	//char path[] = "C:/Users/theok/Documents/Programmering/wave-cryptography";
+	char path[] = ".";
+	//listDirectoryContents(path);
 
 
 
@@ -90,16 +99,26 @@ int main() {
 	char messageFilepath[] = "C:/Users/mortaza.ebeid/Documents/prog/c/wave-cryptography/demo.txt";
 	*/
 
-	/* Theo Paths */
+	/* Theo (Laptop) Paths 
 	char targetFilepath[] = "C:/Users/theodor.kohler/Documents/Programmering/wave-cryptography/AudioFiles/BabyElephantWalk60.wav"; // !!! Change to real location after compiling code !!!
 	char messageFilepath[] = "C:/Users/theodor.kohler/Documents/Programmering/wave-cryptography/demo.txt";
+	*/
+	/* Theo (Desktop) Paths 
+	char targetFilepath[] = "C:/Users/theok/Documents/Programmering/wave-cryptography/AudioFiles/BabyElephantWalk60.wav"; // !!! Change to real location after compiling code !!!
+	char messageFilepath[] = "C:/Users/theok/Documents/Programmering/wave-cryptography/demo.txt";
+	*/
+
+	char targetFilepath[] = "../AudioFiles/BabyElephantWalk60.wav"; // !!! Change to real location after compiling code !!!
+	char messageFilepath[] = "../demo.txt";
 	
 
-	/* Make WAV struct and Message struct
+
+	/* Make WAV structand Message struct
 	
 	// Read in target file and construct header
 	struct WavHeader targetHeader;
 	createTargetHeaderStruct(&targetHeader, targetFilepath);
+	printTargetHeaderStruct(&targetHeader);
 	
 
 	// Read in message file and construct header
@@ -109,7 +128,7 @@ int main() {
 	*/
 
 	
-	/* Read message and target file
+	/* Read messageand target file
 	
 	// Read in message file and message file length
 	unsigned int messageDataLength = fileLength(messageFilepath);
