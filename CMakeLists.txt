@@ -15,6 +15,7 @@ add_executable(wave-cryptography
 	include/messageHeader.h
 	include/util.h
 	include/containerHeader.h
+	include/constants.h
 )
 
 target_compile_features(wave-cryptography PRIVATE cxx_std_20)
