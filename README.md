@@ -78,13 +78,13 @@
 - complete the github documentation
 	- add all needed links
 	- other stuff?
-- split createTargetHeaderStruct into createTargetHeaderStruct and printTargetHeaderStruct
+- ~~split createTargetHeaderStruct into createTargetHeaderStruct and printTargetHeaderStruct~~
 - change variables that tell filesize in bytes so they are stored in uint32 (uint32 if stored in bytes stores over 4GB of data but a wave file is max 4GB, however going for uint16 would give us a measly 65MB)
 - let chacha20() function modify the counter instead. allows for outside temporary storage of the counter if needed after operation and also checking how many steps the chacha block counter has taken so as to not use the same block twice.
-- make: functions return int and add errno functionality (ops in Main! for the most part)
-- check: functions in util file (weird return types and whatnot)
+- make functions return int and add errno functionality (ops in Main! for the most part)
+- check functions in util file (weird return types and whatnot)
 - use definitive variable sizes for structs and other data types which don't allow another size
-- change: stop using google drive and link to the github in “planeringsrapport”, add the links in the github documentation/.md file
+- ~~stop using google drive and link to the github in “planeringsrapport”, add the links in the github documentation/.md file~~
 
 ## How CMake works (guidelines for morti för jag förstår inte) (for devs)
 
