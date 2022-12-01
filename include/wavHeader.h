@@ -22,4 +22,6 @@ struct WavHeader {
 };
 
 struct WavvHeader* createTargetHeaderStruct(struct WavHeader* targetHeader, char* pTargetFilepath);
+
+int printTargetHeaderStruct(struct WavHeader* pTargetHeader);
 #endif

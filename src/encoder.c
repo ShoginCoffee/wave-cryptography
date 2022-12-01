@@ -46,7 +46,7 @@ char* readInMessageData(char* pMessageData, char* pFilepath) {
 
 	if (pMessageFile == NULL) {
 		// If the pMessageFile is NULL then does that mean that it doesn't need to be closed?
-		printf("Message file couldn't be found at given filepath");
+		printf("Message file couldn't be found at given filepath\n");
 		return NULL;
 	}
 
