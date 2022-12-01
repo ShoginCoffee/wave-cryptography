@@ -23,28 +23,80 @@ void printb(char binary) {
 	}
 }
 
-int main() {
-	// fileAPI.h
+#define LIGHTBLUE_TEXT "\033[34;1m"
+#define RESET_COLOR "\033[0m"
 
-	WIN32_FIND_DATA fdfile;
-	HANDLE handle = NULL;
+int listDirectoryContents(char* sDir) {
+	WIN32_FIND_DATA fdFile;
+	HANDLE hFind = NULL;
+
+	char sPath[2048];
+
+	//Specify a file mask. *.* = We want everything!
+	sprintf(sPath, "%s\\*.*", sDir);
+
+	if ((hFind = FindFirstFile(sPath, &fdFile)) == INVALID_HANDLE_VALUE)
+	{
+		printf("Path not found: [%s]\n", sDir);
+		return 0;
+	}
+
+	do
+	{
+		//Find first file will always return "."
+		//    and ".." as the first two directories.
+		if (strcmp(fdFile.cFileName, ".") != 0
+			&& strcmp(fdFile.cFileName, "..") != 0)
+		{
+			//Is the entity a File or Folder?
+			if (fdFile.dwFileAttributes &FILE_ATTRIBUTE_DIRECTORY)
+			{
+				printf(LIGHTBLUE_TEXT);
+				printf("%s/    ", fdFile.cFileName);
+			}
+			else {
+				printf(RESET_COLOR);
+				printf("%s    ", fdFile.cFileName);
+			}
+		}
+	} while (FindNextFile(hFind, &fdFile)); //Find the next file.
+
+	FindClose(hFind); //Always, Always, clean things up!
+
+	printf(RESET_COLOR);
+	return 1;
+}
+
+
+int main() {
+	
+	/* List Directories */
+	
+	//char path[] = "C:/Users/mortaza.ebeid/Documents/prog/c/wave-cryptography";
+	char path[] = "C:/Users/theodor.kohler/Documents/Programmering/wave-cryptography/demo.txt";
+	listDirectoryContents(path);
+
 
 
 	// GUI menu
 	// int nothing = GUIMenu();
 
+
+
 	// Filepaths
 
-	/* Morti paths */
+	/* Morti paths 
 	char targetFilepath[] = "C:/Users/mortaza.ebeid/Documents/prog/c/wave-cryptography/AudioFiles/BabyElephantWalk60.wav"; // !!! Change to real location after compiling code !!!
 	char messageFilepath[] = "C:/Users/mortaza.ebeid/Documents/prog/c/wave-cryptography/demo.txt";
-	
-
-	/* Theo Paths 
-	char targetFilepath[] = "C:/Users/theodor.kohler/Documents/Programmering/wave-cryptography/AudioFiles/BabyElephantWalk60.wav"; // !!! Change to real location after compiling code !!!
-	char messageFilepath[] = "C:/Users/theodor.kohler/Documents/Programmering/wave-cryptography/demo.txt";
 	*/
 
+	/* Theo Paths */
+	char targetFilepath[] = "C:/Users/theodor.kohler/Documents/Programmering/wave-cryptography/AudioFiles/BabyElephantWalk60.wav"; // !!! Change to real location after compiling code !!!
+	char messageFilepath[] = "C:/Users/theodor.kohler/Documents/Programmering/wave-cryptography/demo.txt";
+	
+
+	/* Make WAV struct and Message struct
+	
 	// Read in target file and construct header
 	struct WavHeader targetHeader;
 	createTargetHeaderStruct(&targetHeader, targetFilepath);
@@ -54,7 +106,10 @@ int main() {
 	struct MessageHeader messageHeader;
 	createMessageHeaderStruct(&messageHeader, messageFilepath, sizeof(messageFilepath));
 	printMessageHeaderStruct(&messageHeader);
+	*/
 
+	
+	/* Read message and target file
 	
 	// Read in message file and message file length
 	unsigned int messageDataLength = fileLength(messageFilepath);
@@ -65,7 +120,8 @@ int main() {
 	unsigned int targetDataLength = fileLength(targetFilepath);
 	char* pTargetData = (char*)malloc(targetDataLength);
 	readInTargetData(pTargetData, targetFilepath, targetHeader.subChunk2Size);
-	
+	*/
+
 
 	/*
 	// encoder
