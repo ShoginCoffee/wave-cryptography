@@ -2,11 +2,11 @@
 #include "util.h"
 
 // takes in file path and returns header struct
-struct WavvHeader* createWavHeaderStruct(struct WavHeader* pTargetHeader, char* pTargetFilepath) {
+struct WavvHeader* createTargetHeaderStruct(struct WavHeader* pTargetHeader, char* pTargetFilepath) {
     FILE* pFile = fopen(pTargetFilepath, "rb");
 
     if (pFile == NULL) {
-        printf("Target file couldn't be found at given filepath");
+        printf("Target file couldn't be found at given filepath\n");
         return NULL;
     }
 
@@ -65,6 +65,17 @@ struct WavvHeader* createWavHeaderStruct(struct WavHeader* pTargetHeader, char* 
     bytesRead = fread(buffer4, sizeof(buffer4), 1, pFile);
     pTargetHeader->subChunk2Size = charLEToIntBE(buffer4);
 
+    fclose(pFile);
+    return pTargetHeader;
+}
+
+// takes in pointer to a targetHeaderStruct and prints it to the console
+int printTargetHeaderStruct(struct WavHeader* pTargetHeader) {
+    if (pTargetHeader == NULL) {
+        printf("targetrHeaderStruct couldn't be found at given memory address (pointer)\n");
+        return 1;
+    }
+
     printf("chunkID: %.4s \n", pTargetHeader->chunkID);
     printf("chunkSize: %u \n", pTargetHeader->chunkSize);
     printf("format: %.4s \n", pTargetHeader->format);
@@ -79,9 +90,7 @@ struct WavvHeader* createWavHeaderStruct(struct WavHeader* pTargetHeader, char* 
     printf("subchunk2ID: %.4s \n", pTargetHeader->subChunk2ID);
     printf("subchunk2Size: %u \n", pTargetHeader->subChunk2Size);
 
-
     printf("\n");
 
-    fclose(pFile);
-    return pTargetHeader;
+    return 0;
 }
