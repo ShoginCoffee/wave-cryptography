@@ -14,12 +14,6 @@
 #define LIGHTBLUE_TEXT "\033[34;1m"
 #define RESET_COLOR "\033[0m"
 
-
-void createNewWave() {
-	FILE* pWavEncoded = fopen("../AudioFiles/wavEncoded.wav", "wb");
-	fclose(pWavEncoded);
-}
-
 void printb(char binary) {
 	for (int i = 0; i < 8; i++) {
 		printf("%x", ((binary << i) & 0xff) >> 7);

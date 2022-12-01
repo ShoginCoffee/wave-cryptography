@@ -50,8 +50,8 @@
 
 ## ToDo-List (for devs)
 
-- remove createNewWave()
-- create a "constants.h" header file with CONSTANTS
+- ~~remove createNewWave()~~
+- ~~create a "constants.h" header file with CONSTANTS~~
 - ~~create a function that prints the contents of a directory given a filepath~~
 - ~~make: naming conventions~~
 - ~~split createTargetHeaderStruct into createTargetHeaderStruct and printTargetHeaderStruct~~
