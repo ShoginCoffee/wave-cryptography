@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <windows.h>
 
-#include "wavHeader.h"
+#include "containerHeader.h"
 #include "messageHeader.h"
 #include "chacha.h"
 #include "menuGUI.h"
@@ -77,69 +77,57 @@ int main() {
 	*/
 
 	
-	/* List Directories */
-	
-	//char path[] = "C:/Users/mortaza.ebeid/Documents/prog/c/wave-cryptography";
-	//char path[] = "C:/Users/theodor.kohler/Documents/Programmering/wave-cryptography";
-	//char path[] = "C:/Users/theok/Documents/Programmering/wave-cryptography";
+	/* List Directories 
 	char path[] = ".";
-	//listDirectoryContents(path);
+	listDirectoryContents(path);
+	*/
 
 
 
-	// GUI menu
-	// int nothing = GUIMenu();
-
+	/* GUI menu
+	int nothing = GUIMenu();
+	*/
 
 
 	// Filepaths
-
-	/* Morti paths 
-	char targetFilepath[] = "C:/Users/mortaza.ebeid/Documents/prog/c/wave-cryptography/AudioFiles/BabyElephantWalk60.wav"; // !!! Change to real location after compiling code !!!
-	char messageFilepath[] = "C:/Users/mortaza.ebeid/Documents/prog/c/wave-cryptography/demo.txt";
-	*/
-
-	/* Theo (Laptop) Paths 
-	char targetFilepath[] = "C:/Users/theodor.kohler/Documents/Programmering/wave-cryptography/AudioFiles/BabyElephantWalk60.wav"; // !!! Change to real location after compiling code !!!
-	char messageFilepath[] = "C:/Users/theodor.kohler/Documents/Programmering/wave-cryptography/demo.txt";
-	*/
-	/* Theo (Desktop) Paths 
-	char targetFilepath[] = "C:/Users/theok/Documents/Programmering/wave-cryptography/AudioFiles/BabyElephantWalk60.wav"; // !!! Change to real location after compiling code !!!
-	char messageFilepath[] = "C:/Users/theok/Documents/Programmering/wave-cryptography/demo.txt";
-	*/
-
-	char targetFilepath[] = "../AudioFiles/BabyElephantWalk60.wav"; // !!! Change to real location after compiling code !!!
+	char containerFilepath[] = "../AudioFiles/BabyElephantWalk60.wav"; // !!! Change to real location after compiling code !!!
 	char messageFilepath[] = "../demo.txt";
 	
 
-
-	/* Make WAV structand Message struct
+	/*
+	// Make containerHeader and messageHeader
 	
-	// Read in target file and construct header
-	struct WavHeader targetHeader;
-	createTargetHeaderStruct(&targetHeader, targetFilepath);
-	printTargetHeaderStruct(&targetHeader);
+	// Read in container file and construct containerHeader
+	struct ContainerHeader containerHeader;
+	createContainerHeaderStruct(&containerHeader, containerFilepath);
+	// printContainerHeaderStruct(&containerHeader);
 	
 
-	// Read in message file and construct header
+	// Read in message file and construct messageHeader
 	struct MessageHeader messageHeader;
 	createMessageHeaderStruct(&messageHeader, messageFilepath, sizeof(messageFilepath));
-	printMessageHeaderStruct(&messageHeader);
-	*/
+	// printMessageHeaderStruct(&messageHeader);
+	
 
 	
-	/* Read messageand target file
+	// Read message and container file
 	
 	// Read in message file and message file length
 	unsigned int messageDataLength = fileLength(messageFilepath);
 	char* pMessageData = (char*)malloc(messageDataLength);
 	readInMessageData(pMessageData, messageFilepath);
 
-	// Read in target file and target file length
-	unsigned int targetDataLength = fileLength(targetFilepath);
-	char* pTargetData = (char*)malloc(targetDataLength);
-	readInTargetData(pTargetData, targetFilepath, targetHeader.subChunk2Size);
+	// Read in container file and container file length
+	unsigned int containerDataLength = fileLength(containerFilepath);
+	if (containerDataLength != 0) {
+		char* pContainerData = (char*)malloc(containerDataLength);
+		readInContainerData(pContainerData, containerFilepath, containerHeader.subChunk2Size);
+	}
+	else {
+		printf("main: Container file couldn't be found at given filepath");
+	}
 	*/
+	
 
 
 	/*

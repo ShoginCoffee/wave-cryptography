@@ -7,14 +7,14 @@ add_executable(wave-cryptography
 	src/encoder.c 
 	src/messageHeader.c
 	src/menuGUI.c 
-	src/wavHeader.c
+	src/containerHeader.c
 	src/util.c
 	include/chacha.h
 	include/encoder.h
 	include/menuGUI.h
 	include/messageHeader.h
 	include/util.h
-	include/wavHeader.h
+	include/containerHeader.h
 )
 
 target_compile_features(wave-cryptography PRIVATE cxx_std_20)

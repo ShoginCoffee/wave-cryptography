@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include "encoder.h"
-#include "wavHeader.h"
+#include "containerHeader.h"
 #include "util.h"
 
-void encodeMessage(char* targetData, int sampleSize, int bitsPerByte, char* message, unsigned int messageLength) {
+void encodeMessage(char* containerData, int sampleSize, int bitsPerByte, char* message, unsigned int messageLength) {
 	// SIDENOTE: DEBUG PRINTF ARE COMMENTED OUT BUT ARE STILL IN THE FUNCTION, REMOVE WHEN NECESSARY.
 	int i = sampleSize - 1;
 	int t;
@@ -20,7 +20,7 @@ void encodeMessage(char* targetData, int sampleSize, int bitsPerByte, char* mess
 			bit = ((*(message + messageByte) << messageBit) & 0xff) >> 7;
 			//printf("bit to encode: %d \n\n", bit);
 			// 2. encode bit in data
-			encodeBitInByte((targetData + i), bit, t);
+			encodeBitInByte((containerData + i), bit, t);
 			// 3. update messageData counters
 			if (messageBit + 1 == 8) messageByte++;
 			messageBit = (messageBit + 1) % 8;
@@ -46,7 +46,7 @@ char* readInMessageData(char* pMessageData, char* pFilepath) {
 
 	if (pMessageFile == NULL) {
 		// If the pMessageFile is NULL then does that mean that it doesn't need to be closed?
-		printf("Message file couldn't be found at given filepath\n");
+		printf("readInMessageData: Message file couldn't be found at given filepath\n");
 		return NULL;
 	}
 
@@ -66,21 +66,21 @@ char* readInMessageData(char* pMessageData, char* pFilepath) {
 	return pMessageData;
 }
 
-char* readInTargetData(char* pTargetData, char* pFilepath, int subChunk2Size) {
-	FILE* pTargetFile = fopen(pFilepath, "rb");
+char* readInContainerData(char* pContainerData, char* pFilepath, int subChunk2Size) {
+	FILE* pFile = fopen(pFilepath, "rb");
 
-	if (pTargetFile == NULL) {
+	if (pFile == NULL) {
 		// If the pTargetFile is NULL then does that mean that it doesn't need to be closed?
-		printf("Target file couldn't be found at given filepath");
+		printf("readInContainerData: Container file couldn't be found at given filepath");
 		return NULL;
 	}
 
 	char buffer[44];					
-	fread(buffer, 44, 1, pTargetFile); //Moving the "cursor" to where the data starts. There should be a better way of doing this...
+	fread(buffer, 44, 1, pFile); //Moving the "cursor" to where the data starts. There should be a better way of doing this...
 
-	fread(pTargetData, subChunk2Size, 1, pTargetFile);
+	fread(pContainerData, subChunk2Size, 1, pFile);
 
-	fclose(pTargetFile);
-	return pTargetData;
+	fclose(pFile);
+	return pContainerData;
 }
 

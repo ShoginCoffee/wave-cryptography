@@ -5,7 +5,7 @@
 // 2 - 2 bytes long /  4 - 4 bytes long
 
 // WAVE file header format
-struct WavHeader {
+struct ContainerHeader {
 	char chunkID[4];                        // 4BE RIFF string
 	unsigned int chunkSize;                 // 4LE (file length - 8) bytes
 	char format[4];                         // 4BE WAVE string
@@ -21,7 +21,7 @@ struct WavHeader {
 	unsigned int subChunk2Size;             // 4LE data chunk size: NumSamples * NumChannels * BytesPerSample - (size of the next chunk that will be read)
 };
 
-struct WavvHeader* createTargetHeaderStruct(struct WavHeader* targetHeader, char* pTargetFilepath);
+struct ContainervHeader* createContainerHeaderStruct(struct ContainerHeader* pContainerHeader, char* pContainerFilepath);
 
-int printTargetHeaderStruct(struct WavHeader* pTargetHeader);
+int printContainerHeaderStruct(struct ContainerHeader* pContainerHeader);
 #endif
