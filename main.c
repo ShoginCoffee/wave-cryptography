@@ -43,7 +43,7 @@ int listDirectoryContents(char* sDir) {
 			&& strcmp(fdFile.cFileName, "..") != 0)
 		{
 			//Is the entity a File or Folder?
-			if (fdFile.dwFileAttributes &FILE_ATTRIBUTE_DIRECTORY)
+			if (fdFile.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
 			{
 				printf(LIGHTBLUE_TEXT);
 				printf("%s/    ", fdFile.cFileName);
@@ -62,7 +62,27 @@ int listDirectoryContents(char* sDir) {
 }
 
 
-int main() {
+int main(char argc, char* argv[]) {
+
+
+	// printf("Numer of arguments: %d\n", argc);
+
+	int i = 0;
+	while (i < argc) {
+		// printf("%s\n", argv[i]);
+		if (strcmp(argv[i], "--help") == 0) {
+			printf("HELP MESSAGE");
+			return 0;
+		}
+		else if (strcmp(argv[i], "¨-s") == 0) {
+
+		}
+		else if (strcmp(argv[i], "¨-o") == 0) {
+
+		}
+
+		i++;
+	}
 
 	/* Get the directory where the executable is located
 	char string[255];
@@ -70,8 +90,8 @@ int main() {
 	printf("%s\n", string);
 	*/
 
-	
-	/* List Directories 
+
+	/* List Directories
 	char path[] = ".";
 	listDirectoryContents(path);
 	*/
@@ -86,26 +106,26 @@ int main() {
 	// Filepaths
 	char containerFilepath[] = "../AudioFiles/BabyElephantWalk60.wav"; // !!! Change to real location after compiling code !!!
 	char messageFilepath[] = "../demo.txt";
-	
 
-	/*
+
+
 	// Make containerHeader and messageHeader
-	
+
 	// Read in container file and construct containerHeader
 	struct ContainerHeader containerHeader;
 	createContainerHeaderStruct(&containerHeader, containerFilepath);
 	// printContainerHeaderStruct(&containerHeader);
-	
+
 
 	// Read in message file and construct messageHeader
 	struct MessageHeader messageHeader;
 	createMessageHeaderStruct(&messageHeader, messageFilepath, sizeof(messageFilepath));
 	// printMessageHeaderStruct(&messageHeader);
-	
 
-	
+
+
 	// Read message and container file
-	
+
 	// Read in message file and message file length
 	unsigned int messageDataLength = fileLength(messageFilepath);
 	char* pMessageData = (char*)malloc(messageDataLength);
@@ -120,8 +140,8 @@ int main() {
 	else {
 		printf("main: Container file couldn't be found at given filepath");
 	}
-	*/
-	
+
+
 
 
 	/*
