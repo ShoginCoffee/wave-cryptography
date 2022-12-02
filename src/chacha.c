@@ -156,13 +156,12 @@ void chacha20(uint8_t *cryptText, uint64_t cryptTextLength, uint32_t *pKey, uint
     uint32_t step = 0;
     struct Block workingBlock;
     int length;
-    uint32_t counterCopy = *pCounter;
     uint8_t serialized[64];
 
     // chacha20 magic
     do{
         // chacha20
-        populateBlock(&workingBlock, pKey, &counterCopy, pNonce);
+        populateBlock(&workingBlock, pKey, pCounter, pNonce);
         chacha20Block(&workingBlock);
         serializeBlock(&serialized, &workingBlock);
         length = bytesToCryptLeft % 64 == bytesToCryptLeft ? bytesToCryptLeft : 64;
@@ -171,7 +170,7 @@ void chacha20(uint8_t *cryptText, uint64_t cryptTextLength, uint32_t *pKey, uint
         // increments and decrements (counters)
         bytesToCryptLeft -= 64;
         step++;
-        counterCopy++;
+        (*pCounter)++;
     } while(bytesToCryptLeft > 0);
 
     zeroBlock(&workingBlock);
