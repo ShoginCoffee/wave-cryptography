@@ -63,6 +63,7 @@ int listDirectoryContents(char* sDir) {
 
 
 int main(char argc, char* argv[]) {
+	char version[] = "1.0";
 
 
 	// printf("Numer of arguments: %d\n", argc);
@@ -70,14 +71,18 @@ int main(char argc, char* argv[]) {
 	int i = 0;
 	while (i < argc) {
 		// printf("%s\n", argv[i]);
-		if (strcmp(argv[i], "--help") == 0) {
+		if (strcmp(argv[i], "-v") == 0 || strcmp(argv[i], "--version") == 0) {
+			printf(version);
+			return 0;
+		}
+		else if (strcmp(argv[i], "-h") == 0 || strcmp(argv[i], "--help") == 0) {
 			printf("HELP MESSAGE");
 			return 0;
 		}
-		else if (strcmp(argv[i], "¨-s") == 0) {
+		else if (strcmp(argv[i], "¨-s") == 0 || argv[i], "--source" == 0) {
 
 		}
-		else if (strcmp(argv[i], "¨-o") == 0) {
+		else if (strcmp(argv[i], "¨-o") == 0 || argv[i], "--output" == 0) {
 
 		}
 
