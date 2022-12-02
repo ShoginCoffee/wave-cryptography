@@ -103,9 +103,10 @@ int main(char argc, char* argv[]) {
 	*/
 
 
-	// Filepaths
+	// User inputs
 	char containerFilepath[] = "../AudioFiles/BabyElephantWalk60.wav"; // !!! Change to real location after compiling code !!!
 	char messageFilepath[] = "../demo.txt";
+	unsigned char encryptionMehtod = 1;
 
 
 
@@ -119,8 +120,8 @@ int main(char argc, char* argv[]) {
 
 	// Read in message file and construct messageHeader
 	struct MessageHeader messageHeader;
-	createMessageHeaderStruct(&messageHeader, messageFilepath, sizeof(messageFilepath));
-	// printMessageHeaderStruct(&messageHeader);
+	createMessageHeaderStruct(&messageHeader, messageFilepath, sizeof(messageFilepath), encryptionMehtod);
+	printMessageHeaderStruct(&messageHeader);
 
 
 
