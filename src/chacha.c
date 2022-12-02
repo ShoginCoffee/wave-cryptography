@@ -143,6 +143,7 @@ void populateBlock(struct Block* pBlock, uint32_t* pKey, uint32_t* pCounter, uin
 
 void chacha20(uint8_t* cryptText, uint64_t cryptTextLength, uint32_t* pKey, uint32_t* pCounter, uint32_t* pNonce) {
 
+<<<<<<< HEAD
 	// variable initialization
 	int64_t bytesToCryptLeft = cryptTextLength;
 	uint32_t step = 0;
@@ -165,6 +166,29 @@ void chacha20(uint8_t* cryptText, uint64_t cryptTextLength, uint32_t* pKey, uint
 		step++;
 		counterCopy++;
 	} while (bytesToCryptLeft > 0);
+=======
+    // variable initialization
+    int64_t bytesToCryptLeft = cryptTextLength;
+    uint32_t step = 0;
+    struct Block workingBlock;
+    int length;
+    uint8_t serialized[64];
+
+    // chacha20 magic
+    do{
+        // chacha20
+        populateBlock(&workingBlock, pKey, pCounter, pNonce);
+        chacha20Block(&workingBlock);
+        serializeBlock(&serialized, &workingBlock);
+        length = bytesToCryptLeft % 64 == bytesToCryptLeft ? bytesToCryptLeft : 64;
+        xorStreams(cryptText, step*64, length, serialized);
+
+        // increments and decrements (counters)
+        bytesToCryptLeft -= 64;
+        step++;
+        (*pCounter)++;
+    } while(bytesToCryptLeft > 0);
+>>>>>>> ca4db5ac68c787377a4be638920c549995f6c451
 
 	zeroBlock(&workingBlock);
 }
