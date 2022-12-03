@@ -76,41 +76,13 @@ void chacha20Block(struct Block* block) {
 	zeroBlock(&startBlock);
 }
 
-void serializeBlock(uint8_t* serializeDestination, struct Block* blockSource) {
-	//uint8_t *serialized = malloc(64); // 512 bits
-
-	int i;
+void serializeBlock(uint8_t* serializeDestination, struct Block* sourceBlock) {
 	uint32_t currentInt;
-	for (i = 0; i < 4; i++) {
-		currentInt = blockSource->row1[i];
-		*(serializeDestination + i * 4) = currentInt & 0xFF;
-		*(serializeDestination + i * 4 + 1) = (currentInt & 0xFF00) >> 8;
-		*(serializeDestination + i * 4 + 2) = (currentInt & 0xFF0000) >> 16;
-		*(serializeDestination + i * 4 + 3) = (currentInt & 0xFF000000) >> 24;
-	}
-
-	for (i = 0; i < 4; i++) {
-		currentInt = blockSource->row2[i];
-		*(serializeDestination + 16 + i * 4) = currentInt & 0xFF;
-		*(serializeDestination + 16 + i * 4 + 1) = (currentInt & 0xFF00) >> 8;
-		*(serializeDestination + 16 + i * 4 + 2) = (currentInt & 0xFF0000) >> 16;
-		*(serializeDestination + 16 + i * 4 + 3) = (currentInt & 0xFF000000) >> 24;
-	}
-
-	for (i = 0; i < 4; i++) {
-		currentInt = blockSource->row3[i];
-		*(serializeDestination + 16 * 2 + i * 4) = currentInt & 0xFF;
-		*(serializeDestination + 16 * 2 + i * 4 + 1) = (currentInt & 0xFF00) >> 8;
-		*(serializeDestination + 16 * 2 + i * 4 + 2) = (currentInt & 0xFF0000) >> 16;
-		*(serializeDestination + 16 * 2 + i * 4 + 3) = (currentInt & 0xFF000000) >> 24;
-	}
-
-	for (i = 0; i < 4; i++) {
-		currentInt = blockSource->row4[i];
-		*(serializeDestination + 16 * 3 + i * 4) = currentInt & 0xFF;
-		*(serializeDestination + 16 * 3 + i * 4 + 1) = (currentInt & 0xFF00) >> 8;
-		*(serializeDestination + 16 * 3 + i * 4 + 2) = (currentInt & 0xFF0000) >> 16;
-		*(serializeDestination + 16 * 3 + i * 4 + 3) = (currentInt & 0xFF000000) >> 24;
+	for (unsigned int i = 0; i < 4; i++) {
+		*((uint32_t*)serializeDestination + i) = sourceBlock->row1[i];
+		*((uint32_t*)serializeDestination + 4 + i) = sourceBlock->row2[i];
+		*((uint32_t*)serializeDestination + 8 + i) = sourceBlock->row3[i];
+		*((uint32_t*)serializeDestination + 12 + i) = sourceBlock->row4[i];
 	}
 }
 
@@ -121,12 +93,13 @@ void xorStreams(uint8_t* primaryStream, int lower, int length, uint8_t* secondar
 }
 
 void populateBlock(struct Block* pBlock, uint32_t* pKey, uint32_t* pCounter, uint32_t* pNonce) {
+	// THE CHACHA20 constant “expand 32-byte k” in first row of block
 	pBlock->row1[0] = 0x61707865;
 	pBlock->row1[1] = 0x3320646e;
 	pBlock->row1[2] = 0x79622d32;
 	pBlock->row1[3] = 0x6b206574;
 
-	int i;
+	unsigned int i;
 	for (i = 0; i < 4; i++) {
 		pBlock->row2[i] = *(pKey + i);
 	}
@@ -142,32 +115,8 @@ void populateBlock(struct Block* pBlock, uint32_t* pKey, uint32_t* pCounter, uin
 }
 
 void chacha20(uint8_t* cryptText, uint64_t cryptTextLength, uint32_t* pKey, uint32_t* pCounter, uint32_t* pNonce) {
-
-<<<<<<< HEAD
+    
 	// variable initialization
-	int64_t bytesToCryptLeft = cryptTextLength;
-	uint32_t step = 0;
-	struct Block workingBlock;
-	int length;
-	uint32_t counterCopy = *pCounter;
-	uint8_t serialized[64];
-
-	// chacha20 magic
-	do {
-		// chacha20
-		populateBlock(&workingBlock, pKey, &counterCopy, pNonce);
-		chacha20Block(&workingBlock);
-		serializeBlock(&serialized, &workingBlock);
-		length = bytesToCryptLeft % 64 == bytesToCryptLeft ? bytesToCryptLeft : 64;
-		xorStreams(cryptText, step * 64, length, serialized);
-
-		// increments and decrements (counters)
-		bytesToCryptLeft -= 64;
-		step++;
-		counterCopy++;
-	} while (bytesToCryptLeft > 0);
-=======
-    // variable initialization
     int64_t bytesToCryptLeft = cryptTextLength;
     uint32_t step = 0;
     struct Block workingBlock;
@@ -188,7 +137,6 @@ void chacha20(uint8_t* cryptText, uint64_t cryptTextLength, uint32_t* pKey, uint
         step++;
         (*pCounter)++;
     } while(bytesToCryptLeft > 0);
->>>>>>> ca4db5ac68c787377a4be638920c549995f6c451
 
 	zeroBlock(&workingBlock);
 }
