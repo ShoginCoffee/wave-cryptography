@@ -27,7 +27,6 @@ int createMessageHeaderStruct(struct MessageHeader* pMessageHeader, char* pMessa
 	unsigned int fileNameLength = fileNameAndExtensionLength - fileExtensionLength - 1; // the 1 because of the . before filetype
 	unsigned int subChunk1Size = MESSAGE_HEADER_STATIC_SIZE + fileNameLength + fileExtensionLength;
 
-	pMessageHeader->id = 'w';
 	pMessageHeader->subChunk1Size = subChunk1Size;
 	pMessageHeader->subChunk2Size = subChunk2Size;
 	
@@ -45,7 +44,6 @@ int createMessageHeaderStruct(struct MessageHeader* pMessageHeader, char* pMessa
 }
 
 int printMessageHeaderStruct(struct MessageHeader* pMessageHeader) {
-	printf("id: %c\n", pMessageHeader->id); // unsigned char
 	printf("encryptionMethod: %u\n", pMessageHeader->encryptionMethod); // unsigned char
 	printf("chunkSize: %u\n", pMessageHeader->chunkSize); // unsigned int
 	printf("subChunk1Size: %u\n", pMessageHeader->subChunk1Size); // unsigned int

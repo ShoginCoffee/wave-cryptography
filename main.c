@@ -63,49 +63,7 @@ int listDirectoryContents(char* sDir) {
 
 
 int main(char argc, char* argv[]) {
-	char version[] = "1.0";
-
-
-	// printf("Numer of arguments: %d\n", argc);
-
-	int i = 0;
-	while (i < argc) {
-		// printf("%s\n", argv[i]);
-		if (strcmp(argv[i], "-v") == 0 || strcmp(argv[i], "--version") == 0) {
-			printf(version);
-			return 0;
-		}
-		else if (strcmp(argv[i], "-h") == 0 || strcmp(argv[i], "--help") == 0) {
-			printf("HELP MESSAGE");
-			return 0;
-		}
-		else if (strcmp(argv[i], "¨-s") == 0 || argv[i], "--source" == 0) {
-
-		}
-		else if (strcmp(argv[i], "¨-o") == 0 || argv[i], "--output" == 0) {
-
-		}
-
-		i++;
-	}
-
-	/* Get the directory where the executable is located
-	char string[255];
-	GetCurrentDirectory(255, &string);
-	printf("%s\n", string);
-	*/
-
-
-	/* List Directories
-	char path[] = ".";
-	listDirectoryContents(path);
-	*/
-
-
-
-	/* GUI menu
-	int nothing = GUIMenu();
-	*/
+	const char version[] = "1.0";
 
 
 	// User inputs
@@ -114,37 +72,125 @@ int main(char argc, char* argv[]) {
 	unsigned char encryptionMehtod = 1;
 
 
+	/* Get the directory where the executable is located
+	char string[255];
+	GetCurrentDirectory(255, &string);
+	printf("%s\n", string);
+	*/
+
+	// GUI or CLI
+	if (argc == 1) {
+		// GUI menu
+		// int nothing = GUIMenu();
+
+		/* List Directories
+		char path[] = ".";
+		listDirectoryContents(path);
+		*/
+	}
+	else {
+		char sourceIndex = 0;
+		char dataIndex = 0;
+		char nameIndex = 0;
+		char outputIndex = 0;
+		char encryptionIndex = 0;
+
+		// Goes througth argv and reads in the options given by the user
+		int i = 0;
+		while (i < argc) {
+			if ((strcmp(argv[i], "-h") == 0) || (strcmp(argv[i], "-H") == 0) || (strcmp(argv[i], "--help") == 0)) {
+				printf("usage: crypteo [--help] [--version] [--source <path>] [--data <path>] [--name <value>] [--output <path>] [--encryption <value>]\n\nHelp: documentation of usage of the program [--help] [-h] [-H]\n\nVersion: the version of the program [--version] [-v] [-V]\n\nSource: path to the container file that the data is is to be hidden within [--source] [-s] [-S]\n\nData: path to the message file that has the data that is to be hidden within the container file [--data] [-d] [-D]\n\nName: the name of the new file that has the data hidden within it (without file extension) [--name] [-n] [-N]\n\nOutput: path to the where the new file is to be created [--output] [-o] [-O]\n\nEncryption: if the hidden data is to be encrypted and by which algorithm, if no argument is given it defaults to no encryption. 0: no encryption, 1: chacha20. [--encryption] [-e] [-E]");
+				return 0;
+			}
+			else if ((strcmp(argv[i], "-v") == 0) || (strcmp(argv[i], "-V") == 0) || (strcmp(argv[i], "--version") == 0)) {
+				printf(version);
+				return 0;
+			}
+			else if ((strcmp(argv[i], "-s") == 0) || (strcmp(argv[i], "-S") == 0) || (argv[i], "--source" == 0)) {
+				sourceIndex = i + 1;
+				i++;
+			}
+			else if ((strcmp(argv[i], "-d") == 0) || (strcmp(argv[i], "-D") == 0) || (argv[i], "--data" == 0)) {
+				dataIndex = i + 1;
+				i++;
+			}
+			else if ((strcmp(argv[i], "-n") == 0) || (strcmp(argv[i], "-N") == 0) || (argv[i], "--name" == 0)) {
+				nameIndex = i + 1;
+				i++;
+			}
+			else if ((strcmp(argv[i], "-o") == 0) || (strcmp(argv[i], "-O") == 0) || (argv[i], "--output" == 0)) {
+				outputIndex = i + 1;
+				i++;
+			}
+			else if ((strcmp(argv[i], "-e") == 0) || (strcmp(argv[i], "-E") == 0) || (argv[i], "--encryption" == 0)) {
+				encryptionIndex = i + 1;
+				i++;
+			}
+
+			i++;
+		}
+
+
+		/* Print out arguments passed to program
+		printf("SOURCE: %s\n", argv[sourceIndex]);
+		printf("DATA: %s\n", argv[dataIndex]);
+		printf("NAME: %s\n", argv[nameIndex]);
+		printf("OUTPUT: %s\n", argv[outputIndex]);
+		printf("ENCRYPTION: %s\n", argv[encryptionIndex]);
+		printf("\n");
+		*/
+	}
+
 
 	// Make containerHeader and messageHeader
 
-	// Read in container file and construct containerHeader
+	// Declare and construct containerHeader
 	struct ContainerHeader containerHeader;
-	createContainerHeaderStruct(&containerHeader, containerFilepath);
-	// printContainerHeaderStruct(&containerHeader);
+	if (createContainerHeaderStruct(&containerHeader, containerFilepath) != NULL) {
+		// printContainerHeaderStruct(&containerHeader);
+	}
+	else {
+		return 0;
+	}
 
-
-	// Read in message file and construct messageHeader
+	// Declare and construct messageHeader
 	struct MessageHeader messageHeader;
-	createMessageHeaderStruct(&messageHeader, messageFilepath, sizeof(messageFilepath), encryptionMehtod);
-	printMessageHeaderStruct(&messageHeader);
-
+	if (createMessageHeaderStruct(&messageHeader, messageFilepath, sizeof(messageFilepath), encryptionMehtod) != NULL) {
+		// printMessageHeaderStruct(&messageHeader);
+	}
+	else {
+		return 0;
+	}
 
 
 	// Read message and container file
 
 	// Read in message file and message file length
+	char* pMessageData = NULL;
 	unsigned int messageDataLength = fileLength(messageFilepath);
-	char* pMessageData = (char*)malloc(messageDataLength);
-	readInMessageData(pMessageData, messageFilepath);
+	if (messageDataLength != 0) {
+		pMessageData = (char*)malloc(messageDataLength);
+		readInMessageData(pMessageData, messageFilepath);
+	}
+	else {
+		printf("main: Data file couldn't be found at given filepath");
+		free(pMessageData);
+		return 0;
+	}
+
 
 	// Read in container file and container file length
+	char* pContainerData = NULL;
 	unsigned int containerDataLength = fileLength(containerFilepath);
 	if (containerDataLength != 0) {
-		char* pContainerData = (char*)malloc(containerDataLength);
+		pContainerData = (char*)malloc(containerDataLength);
 		readInContainerData(pContainerData, containerFilepath, containerHeader.subChunk2Size);
 	}
 	else {
 		printf("main: Container file couldn't be found at given filepath");
+		free(pMessageData);
+		free(pContainerData);
+		return 0;
 	}
 
 
@@ -220,7 +266,8 @@ int main(char argc, char* argv[]) {
 	}
 	*/
 
-	//free(pMessageData);
-	//free(pTargetData);
+	// TODO: How to free allocated memory that is not always allocated
+	free(pMessageData);
+	free(pContainerData);
 	return 0;
 }
