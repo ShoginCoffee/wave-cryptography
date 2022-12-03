@@ -67,9 +67,11 @@ int main(char argc, char* argv[]) {
 
 
 	// User inputs
-	char containerFilepath[] = "../AudioFiles/BabyElephantWalk60.wav"; // !!! Change to real location after compiling code !!!
-	char messageFilepath[] = "../demo.txt";
-	unsigned char encryptionMehtod = 1;
+	char* pContainerFilepath; // = "../AudioFiles/BabyElephantWalk60.wav"; // !!! Change to real location after compiling code !!!
+	char* pMessageFilepath; // = "../demo.txt";
+	char* resultName;
+	char* pResultFilepath;
+	unsigned char encryptionMehtod; // = 1;
 
 
 	/* Get the directory where the executable is located
@@ -130,7 +132,6 @@ int main(char argc, char* argv[]) {
 			i++;
 		}
 
-
 		/* Print out arguments passed to program
 		printf("SOURCE: %s\n", argv[sourceIndex]);
 		printf("DATA: %s\n", argv[dataIndex]);
@@ -139,6 +140,49 @@ int main(char argc, char* argv[]) {
 		printf("ENCRYPTION: %s\n", argv[encryptionIndex]);
 		printf("\n");
 		*/
+
+		// Check if a container and message file have been input
+		if ((sourceIndex == 0) || (dataIndex == 0)) {
+			if (sourceIndex == 0) {
+				printf("Container file is required.\n");
+				return 0;
+			}
+			printf("Message file is required.\n");
+			return 0;
+		}
+		else {
+			pContainerFilepath = (char*)malloc(sizeof(argv[sourceIndex]));
+			strcpy(pContainerFilepath, &argv[sourceIndex]);
+
+			pMessageFilepath = (char*)malloc(sizeof(argv[dataIndex]));
+			strcpy(pMessageFilepath, &argv[dataIndex]);
+		}
+
+		// Check if name for output file has been input else set it to the name of the input file
+		if (nameIndex == 0) {
+			//TODO: set resultName to input file name
+		}
+		else {
+			resultName = (char*)malloc(sizeof(argv[nameIndex]));
+			strcpy(resultName, &argv[nameIndex]);
+		}
+
+		// Check if output filepath has been input else set it to the filepath of the input file
+		if (outputIndex == 0) {
+			//TODO: set pResultFilepath to the same as input
+		}
+		else {
+			pResultFilepath = (char*)malloc(sizeof(argv[outputIndex]));
+			strcpy(pResultFilepath, &argv[outputIndex]);
+		}
+
+		// Check if encryption method has been input else set it to 0 (no encryption)
+		if (encryptionIndex == 0) {
+			encryptionMehtod = 0;
+		}
+		else {
+			encryptionMehtod = atoi(argv[encryptionIndex]);
+		}
 	}
 
 
@@ -146,7 +190,7 @@ int main(char argc, char* argv[]) {
 
 	// Declare and construct containerHeader
 	struct ContainerHeader containerHeader;
-	if (createContainerHeaderStruct(&containerHeader, containerFilepath) != NULL) {
+	if (createContainerHeaderStruct(&containerHeader, pContainerFilepath) != NULL) {
 		// printContainerHeaderStruct(&containerHeader);
 	}
 	else {
@@ -155,7 +199,7 @@ int main(char argc, char* argv[]) {
 
 	// Declare and construct messageHeader
 	struct MessageHeader messageHeader;
-	if (createMessageHeaderStruct(&messageHeader, messageFilepath, sizeof(messageFilepath), encryptionMehtod) != NULL) {
+	if (createMessageHeaderStruct(&messageHeader, pMessageFilepath, strlen(pMessageFilepath), encryptionMehtod) != NULL) {
 		// printMessageHeaderStruct(&messageHeader);
 	}
 	else {
@@ -167,10 +211,10 @@ int main(char argc, char* argv[]) {
 
 	// Read in message file and message file length
 	char* pMessageData = NULL;
-	unsigned int messageDataLength = fileLength(messageFilepath);
+	unsigned int messageDataLength = fileLength(pMessageFilepath);
 	if (messageDataLength != 0) {
 		pMessageData = (char*)malloc(messageDataLength);
-		readInMessageData(pMessageData, messageFilepath);
+		readInMessageData(pMessageData, pMessageFilepath);
 	}
 	else {
 		printf("main: Data file couldn't be found at given filepath");
@@ -181,10 +225,10 @@ int main(char argc, char* argv[]) {
 
 	// Read in container file and container file length
 	char* pContainerData = NULL;
-	unsigned int containerDataLength = fileLength(containerFilepath);
+	unsigned int containerDataLength = fileLength(pContainerFilepath);
 	if (containerDataLength != 0) {
 		pContainerData = (char*)malloc(containerDataLength);
-		readInContainerData(pContainerData, containerFilepath, containerHeader.subChunk2Size);
+		readInContainerData(pContainerData, pContainerFilepath, containerHeader.subChunk2Size);
 	}
 	else {
 		printf("main: Container file couldn't be found at given filepath");
