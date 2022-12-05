@@ -12,6 +12,9 @@
 
 ## Conventions (for devs and code reading)
 
+- When Printing
+	- Whatever printing should leave on one newline in **most** cases
+
 - Variables
 	- camelCase
 	- if it's a variable whose size would pose issues if it was changed, then it should have a fixed size (check stdint.h)
@@ -23,12 +26,15 @@
 
 - Functions
 	- camelCase
-	- if it’s a function that returns a pointer of a known size, it should instead take a pointer to a variable and modify it (the size of the pointer is also passed)
-	- if it's a function that returns a pointer of an unknown size, it should take in a pointer to an integer that modifies it to the size of the pointer
-	- if it's a function that could give an error, it should return an integer
-		- return 1 if function executed successfully
-		- return 0 if function did not execute successfully and if there was only one possible error?????
-		- ***WE NEED TO READ A BIT MORE ON ERROR HANDLING BEFORE WRITING THIS***
+	- if it’s a function that returns a pointer of a known size, it should instead take a pointer to the variable wanted and modify it (if it's an array: the size is also passed)
+	- if it's a function that returns a pointer of an unknown size, it should take in a pointer to an integer that modifies its value to the size of the pointer
+	- if it's a function that could give an error, it should return an integer that ONLY communicates error/error type
+		- return 0 if function executed successfully
+		- use errno where needed; print errno error in function; return 1 when error (function should leave on ONE newline)
+		- it's the function that should print the error
+		- if function needs to communicate what type of error it is: it should return a positive integer that refers to an error
+		- if the the function needs to also return something, it should instead take in a pointer to a desired data type and write the "return" to said pointer
+		- reset errno (errno = 0) BEFORE calling a function that will use errno
 
 - Structs
 	- PascalCase
@@ -50,6 +56,8 @@
 
 ## ToDo-List (for devs)
 
+- ~~put conventions into effect~~
+- ~~remove ID from messageHeader~~
 - ~~remove createNewWave()~~
 - ~~create a "constants.h" header file with CONSTANTS~~
 - ~~create a function that prints the contents of a directory given a filepath~~
@@ -78,19 +86,15 @@
 	- decoding function
 	- list commands and how to use them when inputting **--help** or **-h** or **help** or **?** or **commands**
 - complete the github documentation
-	- add all needed links
+	- ~~add all needed links~~
 	- other stuff?
-
-- change variables that tell filesize in bytes so they are stored in uint32 (uint32 if stored in bytes stores over 4GB of data but a wave file is max 4GB, however going for uint16 would give us a measly 65MB)
+	
+- ~~change variables that tell filesize in bytes so they are stored in uint32 (uint32 if stored in bytes stores over 4GB of data but a wave file is max 4GB, however going for uint16 would give us a measly 65MB)~~
+- ~~use definitive variable sizes for structs and other data types which don't allow another size~~
 - ~~let chacha20() function modify the counter instead. allows for outside temporary storage of the counter if needed after operation and also checking how many steps the chacha block counter has taken so as to not use the same block twice.~~
-- make functions return int and add errno functionality (ops in Main! for the most part)
-- check functions in util file (weird return types and whatnot)
-- use definitive variable sizes for structs and other data types which don't allow another size
+- ~~make functions return int and add errno functionality~~
+- ~~change util functions so they return fixed size ints and change WAV header so it has fixed size ints~~
 - ~~stop using google drive and link to the github in “planeringsrapport”, add the links in the github documentation/.md file~~
-
-## How CMake works (guidelines for morti för jag förstår inte) (for devs)
-
-*Hjelp mig*
 
 ## Other general information (for devs)
 

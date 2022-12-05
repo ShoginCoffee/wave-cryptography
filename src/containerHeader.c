@@ -1,23 +1,42 @@
 #include "containerHeader.h"
 #include "util.h"
+#include "constants.h"
+
+#include <errno.h>
+#include <string.h>
 
 // takes in file path and returns header struct
-struct ContainervHeader* createContainerHeaderStruct(struct ContainerHeader* pContainerHeader, char* pContainerFilepath) {
+int createContainerHeaderStruct(struct ContainerHeader* pContainerHeader, char* pContainerFilepath) {
+    uint32_t containerFileSize;
+    int output = fileLength(pContainerFilepath, &containerFileSize);
+
+    if (output != 0) {
+        printf("error in createContainerHeaderStruct() \n"); // REMOVE BEFORE RELEASE
+        return 1;
+    }
+
+    if (containerFileSize < WAV_HEADER_SIZE) {
+        printf("error in createContainerHeaderStruct() \n"); // REMOVE BEFORE RELEASE
+        printf("invalid WAV file: invalid header length \n");
+        return 1;
+    }
+
+    errno = 0;
     FILE* pFile = fopen(pContainerFilepath, "rb");
 
     if (pFile == NULL) {
-        printf("createContainerHeaderStruct: Container file couldn't be found at given filepath\n");
-        return NULL;
+        printf("error in createContainerHeaderStruct() \n"); // REMOVE BEFORE RELEASE
+        printf("Could not access file in filepath[%s]: \n%s \n", pContainerFilepath, strerror(errno));
+        return 1;
     }
 
     unsigned char buffer4[4];
     unsigned char buffer2[2];
 
     // read header into struct
-    int bytesRead = 0;
 
-    // ChunkID  4 byte BE
-    bytesRead = fread(pContainerHeader->chunkID, sizeof(pContainerHeader->chunkID), 1, pFile);
+    // ChunkID 4 byte BE
+    int bytesRead = fread(pContainerHeader->chunkID, sizeof(pContainerHeader->chunkID), 1, pFile);
 
     // ChunkSize 4 byte LE converted to BE
     bytesRead = fread(buffer4, sizeof(buffer4), 1,pFile);
@@ -65,7 +84,7 @@ struct ContainervHeader* createContainerHeaderStruct(struct ContainerHeader* pCo
     pContainerHeader->subChunk2Size = charLEToIntBE(buffer4);
 
     fclose(pFile);
-    return pContainerHeader;
+    return 0;
 }
 
 // takes in pointer to a containerHeaderHeaderStruct and prints it to the console

@@ -1,7 +1,7 @@
 #ifndef MENUGUI_H
 #define MENUGUI_H
+
 #include <stdio.h>
-#include "menuGUI.h"
 
 void getUserInputInt(int *pUserInput);
 

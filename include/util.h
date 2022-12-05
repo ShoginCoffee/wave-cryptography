@@ -1,13 +1,17 @@
 #ifndef UTIL_H
 #define UTIL_H
 
-unsigned int fileLength(char* pFilepath);
+#include <stdint.h>
 
-unsigned short charLEToShortBE(unsigned char charArray[2]);
+int fileLength(char* pFilepath, uint32_t* pFileLength);
 
-unsigned int charLEToIntBE(unsigned char charArray[4]);
+int listDirectoryContents(char* sDir);
 
-unsigned char* shortBEToCharLE(unsigned short num);
+uint16_t charLEToShortBE(unsigned char charArray[2]);
 
-unsigned char* intBEToCharLE(unsigned int num);
+uint32_t charLEToIntBE(unsigned char charArray[4]);
+
+void shortBEToCharLE(uint16_t num, unsigned char* destinationCharLE);
+
+void intBEToCharLE(uint32_t num, unsigned char* destinationCharLE);
 #endif

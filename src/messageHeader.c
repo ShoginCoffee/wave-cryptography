@@ -1,51 +1,52 @@
 #include "messageHeader.h"
-#include <stdio.h>
 #include "util.h"
-#include <string.h>
 
-// Size of the static part of MESSAGE after subChunk1Size
-const size_t MESSAGE_HEADER_STATIC_SIZE = 8;
+#include <stdio.h>
+#include <string.h>
+#include <errno.h>
 
 int createMessageHeaderStruct(struct MessageHeader* pMessageHeader, char* pMessageFilepath, unsigned int messageFilepathLength, unsigned char encryptionMethod) {
-	unsigned int subChunk2Size = fileLength(pMessageFilepath);
+	uint32_t subChunk2Size;
+	int output = fileLength(pMessageFilepath, &subChunk2Size);
 
-	if (subChunk2Size == NULL) {
-		printf("createMessageHeaderStruct: Message file couldn't be found at given filepath\n");
-		return NULL;
+	if (output != 0) {
+		printf("error in createMessageHeaderStruct() \n"); // REMOVE BEFORE RELEASE
+		return 1;
 	}
-
+	
 	// Find message file name and its length
 	char* pFileName = strrchr(pMessageFilepath, '/') + 1;
-	unsigned int fileNameAndExtensionLength = messageFilepathLength - (pFileName - pMessageFilepath + 1);
+	unsigned int filenameAndExtensionLength = messageFilepathLength - (pFileName - pMessageFilepath + 1);
 	
 
 	// Finding FileExtension and its length
 	char* pMessageFileExtension = strrchr(pFileName, '.') + 1;
+	unsigned char fileExtensionLength = filenameAndExtensionLength - (pMessageFileExtension - pFileName);
 
+	// Size of the static part of MESSAGE after subChunk1Size
+	const unsigned int MESSAGE_HEADER_SUBCHUNK1_STATIC_SIZE = sizeof(pMessageHeader->filenameLength) + sizeof(pMessageHeader->fileExtensionLength);
+	// filenameLength and metadata/subchunk1 size in message header
+	uint16_t filenameLength = filenameAndExtensionLength - fileExtensionLength - 1; // the 1 because of the . before filetype
+	uint16_t subChunk1Size = MESSAGE_HEADER_SUBCHUNK1_STATIC_SIZE + filenameLength + fileExtensionLength;
 
-	unsigned int fileExtensionLength = fileNameAndExtensionLength - (pMessageFileExtension - pFileName);
-	unsigned int fileNameLength = fileNameAndExtensionLength - fileExtensionLength - 1; // the 1 because of the . before filetype
-	unsigned int subChunk1Size = MESSAGE_HEADER_STATIC_SIZE + fileNameLength + fileExtensionLength;
-
-	pMessageHeader->id = 'w';
 	pMessageHeader->subChunk1Size = subChunk1Size;
 	pMessageHeader->subChunk2Size = subChunk2Size;
 	
-	pMessageHeader->filenameLength = fileNameLength;
-	memcpy(pMessageHeader->filename, pFileName, fileNameLength);
+	pMessageHeader->filenameLength = filenameLength;
+	memcpy(pMessageHeader->filename, pFileName, filenameLength);
 
 	pMessageHeader->fileExtensionLength = fileExtensionLength;
 	memcpy(pMessageHeader->fileExtension, pMessageFileExtension, fileExtensionLength);
 
 	pMessageHeader->encryptionMethod = encryptionMethod;
 
-	pMessageHeader->chunkSize = pMessageHeader->subChunk1Size + pMessageHeader->subChunk2Size;
+	const unsigned int SUBCHUNK_SIZES = sizeof(pMessageHeader->subChunk1Size) + sizeof(pMessageHeader->subChunk2Size);
+	pMessageHeader->chunkSize = pMessageHeader->subChunk1Size + pMessageHeader->subChunk2Size + SUBCHUNK_SIZES;
 
 	return 0;
 }
 
 int printMessageHeaderStruct(struct MessageHeader* pMessageHeader) {
-	printf("id: %c\n", pMessageHeader->id); // unsigned char
 	printf("encryptionMethod: %u\n", pMessageHeader->encryptionMethod); // unsigned char
 	printf("chunkSize: %u\n", pMessageHeader->chunkSize); // unsigned int
 	printf("subChunk1Size: %u\n", pMessageHeader->subChunk1Size); // unsigned int
