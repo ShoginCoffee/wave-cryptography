@@ -12,6 +12,10 @@
 
 ## Conventions (for devs and code reading)
 
+- General
+	- use strcmp() when comparing strings
+	- use strlen() instead of sizeof() when finding size of a STRING (ends with null character)
+
 - When Printing
 	- Whatever printing should leave on one newline in **most** cases
 

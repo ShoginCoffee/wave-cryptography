@@ -16,8 +16,7 @@ int createMessageHeaderStruct(struct MessageHeader* pMessageHeader, char* pMessa
 	
 	// Find message file name and its length
 	char* pFileName = strrchr(pMessageFilepath, '/') + 1;
-	unsigned int filenameAndExtensionLength = messageFilepathLength - (pFileName - pMessageFilepath + 1);
-	
+	unsigned int filenameAndExtensionLength = messageFilepathLength - (pFileName - pMessageFilepath);
 
 	// Finding FileExtension and its length
 	char* pMessageFileExtension = strrchr(pFileName, '.') + 1;
@@ -34,6 +33,7 @@ int createMessageHeaderStruct(struct MessageHeader* pMessageHeader, char* pMessa
 	
 	pMessageHeader->filenameLength = filenameLength;
 	memcpy(pMessageHeader->filename, pFileName, filenameLength);
+
 
 	pMessageHeader->fileExtensionLength = fileExtensionLength;
 	memcpy(pMessageHeader->fileExtension, pMessageFileExtension, fileExtensionLength);

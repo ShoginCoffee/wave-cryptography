@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.15)
-project(wave-cryptography)
+project(crypteo)
 
-add_executable(wave-cryptography
+add_executable(crypteo
 	main.c 
 	src/chacha.c 
 	src/encoder.c 
@@ -18,6 +18,6 @@ add_executable(wave-cryptography
 	include/constants.h
 )
 
-target_compile_features(wave-cryptography PRIVATE cxx_std_20)
-target_include_directories(wave-cryptography PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
+target_compile_features(crypteo PRIVATE cxx_std_20)
+target_include_directories(crypteo PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
