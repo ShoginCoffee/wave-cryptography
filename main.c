@@ -59,46 +59,58 @@ int main(char argc, char* argv[]) {
 		// Goes througth argv and reads in the options given by the user
 		int i = 0;
 		while (i < argc) {
-			if ((strcmp(argv[i], "-h") == 0) || (strcmp(argv[i], "-H") == 0) || (strcmp(argv[i], "--help") == 0)) {
-				printf("usage: crypteo [--help] [--version] [--source <path>] [--data <path>] [--name <value>] [--output <path>] [--encryption <value>]\n\nHelp: documentation of usage of the program [--help] [-h] [-H]\n\nVersion: the version of the program [--version] [-v] [-V]\n\nSource: path to the container file that the data is is to be hidden within [--source] [-s] [-S]\n\nData: path to the message file that has the data that is to be hidden within the container file [--data] [-d] [-D]\n\nName: the name of the new file that has the data hidden within it (without file extension) [--name] [-n] [-N]\n\nOutput: path to the where the new file is to be created [--output] [-o] [-O]\n\nEncryption: if the hidden data is to be encrypted and by which algorithm, if no argument is given it defaults to no encryption. 0: no encryption, 1: chacha20. [--encryption] [-e] [-E]");
+			if ( strcmp(argv[i], "-h") == 0 || strcmp(argv[i], "-H") == 0 || strcmp("--help", argv[i]) == 0 ) {
+				printf("usage: crypteo [--help] [--version] [--source <path>] [--data <path>] [--name <value>] [--output <path>] [--encryption <value>]\n\nHelp: documentation of usage of the program [--help] [-h] [-H]\n\nVersion: the version of the program [--version] [-v] [-V]\n\nSource: path to the container file that the data is is to be hidden within [--source] [-s] [-S]\n\nData: path to the message file that has the data that is to be hidden within the container file [--data] [-d] [-D]\n\nName: the name of the new file that has the data hidden within it (without file extension) [--name] [-n] [-N]\n\nOutput: Directory where the new file is to be created [--output] [-o] [-O]\n\nEncryption: if the hidden data is to be encrypted and by which algorithm, if no argument is given it defaults to no encryption. 0: no encryption, 1: chacha20. [--encryption] [-e] [-E]");
 				return 0;
 			}
-			else if ((strcmp(argv[i], "-v") == 0) || (strcmp(argv[i], "-V") == 0) || (strcmp(argv[i], "--version") == 0)) {
+			else if ( strcmp(argv[i], "-v") == 0 || strcmp(argv[i], "-V") == 0 || strcmp("--version", argv[i]) == 0 ) {
 				printf(version);
 				return 0;
 			}
-			else if ((strcmp(argv[i], "-s") == 0) || (strcmp(argv[i], "-S") == 0) || (argv[i], "--source" == 0)) {
-				sourceIndex = i + 1;
+			else if ( strcmp(argv[i], "-s") == 0 || strcmp(argv[i], "-S") == 0 || strcmp("--source", argv[i]) == 0 ) {
+				if (argc >= i + 1) {
+					sourceIndex = i + 1;
+				}
 				i++;
 			}
-			else if ((strcmp(argv[i], "-d") == 0) || (strcmp(argv[i], "-D") == 0) || (argv[i], "--data" == 0)) {
-				dataIndex = i + 1;
+			else if ( strcmp(argv[i], "-d") == 0 || strcmp(argv[i], "-D") == 0 || strcmp("--data", argv[i]) == 0) {
+				if (argc >= i + 1) {
+					dataIndex = i + 1;
+				}
 				i++;
 			}
-			else if ((strcmp(argv[i], "-n") == 0) || (strcmp(argv[i], "-N") == 0) || (argv[i], "--name" == 0)) {
-				nameIndex = i + 1;
+			else if ( strcmp(argv[i], "-n") == 0 || strcmp(argv[i], "-N") == 0 || strcmp("--name", argv[i]) == 0 ) {
+				if (argc >= i + 1) {
+					nameIndex = i + 1;
+				}
 				i++;
 			}
-			else if ((strcmp(argv[i], "-o") == 0) || (strcmp(argv[i], "-O") == 0) || (argv[i], "--output" == 0)) {
-				outputIndex = i + 1;
+			else if ( strcmp(argv[i], "-o") == 0 || strcmp(argv[i], "-O") == 0 || strcmp("--output", argv[i]) == 0 ) {
+				if (argc >= i + 1) {
+					outputIndex = i + 1;
+				}
 				i++;
 			}
-			else if ((strcmp(argv[i], "-e") == 0) || (strcmp(argv[i], "-E") == 0) || (argv[i], "--encryption" == 0)) {
-				encryptionIndex = i + 1;
+			else if ( strcmp(argv[i], "-e") == 0 || strcmp(argv[i], "-E") == 0 || strcmp("--encryption", argv[i]) == 0 ) {
+				if (argc >= i + 1) {
+					encryptionIndex = i + 1;
+				}
 				i++;
 			}
 
 			i++;
 		}
 
-		/* Print out arguments passed to program
+		/* Print out arguments passed to program */
+		//printf("sizeof source: %d \n", sizeof(argv[sourceIndex]));
+		//printf("strlen source: %d \n", strlen(argv[sourceIndex]));
 		printf("SOURCE: %s\n", argv[sourceIndex]);
 		printf("DATA: %s\n", argv[dataIndex]);
 		printf("NAME: %s\n", argv[nameIndex]);
 		printf("OUTPUT: %s\n", argv[outputIndex]);
 		printf("ENCRYPTION: %s\n", argv[encryptionIndex]);
 		printf("\n");
-		*/
+		
 
 		// Check if a container and message file have been input
 		if ((sourceIndex == 0) || (dataIndex == 0)) {
@@ -110,20 +122,20 @@ int main(char argc, char* argv[]) {
 			return 0;
 		}
 		else {
-			pContainerFilepath = (char*)malloc(sizeof(argv[sourceIndex]));
-			strcpy(pContainerFilepath, &argv[sourceIndex]);
+			pContainerFilepath = (char*)malloc(strlen(argv[sourceIndex]));
+			strcpy(pContainerFilepath, argv[sourceIndex]);
 
-			pMessageFilepath = (char*)malloc(sizeof(argv[dataIndex]));
-			strcpy(pMessageFilepath, &argv[dataIndex]);
+			pMessageFilepath = (char*)malloc(strlen(argv[dataIndex]));
+			strcpy(pMessageFilepath, argv[dataIndex]);
 		}
 
-		// Check if name for output file has been input else set it to the name of the input file
+		// Check if name for output file has been input; else set it to the name of the input file
 		if (nameIndex == 0) {
 			//TODO: set resultName to input file name
 		}
 		else {
-			resultName = (char*)malloc(sizeof(argv[nameIndex]));
-			strcpy(resultName, &argv[nameIndex]);
+			resultName = (char*)malloc(strlen(argv[nameIndex]));
+			strcpy(resultName, argv[nameIndex]);
 		}
 
 		// Check if output filepath has been input else set it to the filepath of the input file
@@ -131,8 +143,8 @@ int main(char argc, char* argv[]) {
 			//TODO: set pResultFilepath to the same as input
 		}
 		else {
-			pResultFilepath = (char*)malloc(sizeof(argv[outputIndex]));
-			strcpy(pResultFilepath, &argv[outputIndex]);
+			pResultFilepath = (char*)malloc(strlen(argv[outputIndex]));
+			strcpy(pResultFilepath, argv[outputIndex]);
 		}
 
 		// Check if encryption method has been input else set it to 0 (no encryption)
@@ -142,6 +154,17 @@ int main(char argc, char* argv[]) {
 		else {
 			encryptionMehtod = atoi(argv[encryptionIndex]);
 		}
+
+		printf("Variables: \n");
+		printf("container filepath:	%s \n", pContainerFilepath);
+		printf("message filepath:	%s \n", pMessageFilepath);
+		printf("result filepath:	%s \n", pResultFilepath);
+		printf("result name:		%s \n", resultName);
+		printf("encryption method:	%d \n", encryptionMehtod);
+
+
+
+		return 0;
 	}
 
 	// List Directories
