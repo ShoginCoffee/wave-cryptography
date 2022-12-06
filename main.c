@@ -68,31 +68,31 @@ int main(char argc, char* argv[]) {
 				return 0;
 			}
 			else if ( strcmp(argv[i], "-s") == 0 || strcmp(argv[i], "-S") == 0 || strcmp("--source", argv[i]) == 0 ) {
-				if (argc >= i + 1) {
+				if (argc > i + 1) {
 					sourceIndex = i + 1;
 				}
 				i++;
 			}
 			else if ( strcmp(argv[i], "-d") == 0 || strcmp(argv[i], "-D") == 0 || strcmp("--data", argv[i]) == 0) {
-				if (argc >= i + 1) {
+				if (argc > i + 1) {
 					dataIndex = i + 1;
 				}
 				i++;
 			}
 			else if ( strcmp(argv[i], "-n") == 0 || strcmp(argv[i], "-N") == 0 || strcmp("--name", argv[i]) == 0 ) {
-				if (argc >= i + 1) {
+				if (argc > i + 1) {
 					nameIndex = i + 1;
 				}
 				i++;
 			}
 			else if ( strcmp(argv[i], "-o") == 0 || strcmp(argv[i], "-O") == 0 || strcmp("--output", argv[i]) == 0 ) {
-				if (argc >= i + 1) {
+				if (argc > i + 1) {
 					outputIndex = i + 1;
 				}
 				i++;
 			}
 			else if ( strcmp(argv[i], "-e") == 0 || strcmp(argv[i], "-E") == 0 || strcmp("--encryption", argv[i]) == 0 ) {
-				if (argc >= i + 1) {
+				if (argc > i + 1) {
 					encryptionIndex = i + 1;
 				}
 				i++;
@@ -156,13 +156,22 @@ int main(char argc, char* argv[]) {
 		}
 
 		printf("Variables: \n");
-		printf("container filepath:	%s \n", pContainerFilepath);
-		printf("message filepath:	%s \n", pMessageFilepath);
-		printf("result filepath:	%s \n", pResultFilepath);
-		printf("result name:		%s \n", resultName);
-		printf("encryption method:	%d \n", encryptionMehtod);
 
-
+		if (sourceIndex != 0) {
+			printf("container filepath:	%s \n", pContainerFilepath);
+		}
+		if (dataIndex != 0) {
+			printf("message filepath:	%s \n", pMessageFilepath);
+		}
+		if (outputIndex != 0) {
+			printf("result filepath:	%s \n", pResultFilepath);
+		}
+		if (nameIndex != 0) {
+			printf("result name:		%s \n", resultName);
+		}
+		if (encryptionIndex != 0) {
+			printf("encryption method:	%d \n", encryptionMehtod);
+		}
 
 		return 0;
 	}
