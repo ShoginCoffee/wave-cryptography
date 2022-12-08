@@ -17,6 +17,17 @@ void printb(char binary) {
 	}
 }
 
+// returns 1 if ANY of the strings match the arg ELSE returns 0
+int argCmp(int numberOfStrings, const char** compareStrings, char* compareArg) {
+	int cmpResult;
+	for (int i = 0; i < numberOfStrings; i++) {
+		cmpResult = strcmp(compareArg, compareStrings[i]);
+		if (cmpResult == 0) return 1;
+	}
+
+	return 0;
+}
+
 int main(char argc, char* argv[]) {
 	int output;
 	const char version[] = "1.0";
@@ -32,6 +43,10 @@ int main(char argc, char* argv[]) {
 	char* pResultFilepath;
 	// unsigned char encryptionMehtod; // = 1;
 
+	char *containerArguments[] = {"-s", "-S", "--source"};
+	int containerArgumentCount = sizeof(containerArguments) / sizeof(char*);
+
+	
 
 	/* Get the directory where the executable is located
 	char string[255];
@@ -48,8 +63,7 @@ int main(char argc, char* argv[]) {
 		char path[] = ".";
 		listDirectoryContents(path);
 		*/
-	}
-	else {
+	} else {
 		char sourceIndex = 0;
 		char dataIndex = 0;
 		char nameIndex = 0;
@@ -67,7 +81,7 @@ int main(char argc, char* argv[]) {
 				printf(version);
 				return 0;
 			}
-			else if ( strcmp(argv[i], "-s") == 0 || strcmp(argv[i], "-S") == 0 || strcmp("--source", argv[i]) == 0 ) {
+			else if ( argCmp(containerArgumentCount, containerArguments, argv[i])) {
 				if (argc > i + 1) {
 					sourceIndex = i + 1;
 				}
