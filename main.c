@@ -4,6 +4,7 @@
 #include "menuGUI.h"
 #include "encoder.h"
 #include "util.h"
+#include "constants.h"
 
 #include <stdlib.h>
 #include <stdint.h>
@@ -81,7 +82,7 @@ int main(char argc, char* argv[]) {
 				printf(version);
 				return 0;
 			}
-			else if ( argCmp(containerArgumentCount, containerArguments, argv[i])) {
+			else if (argCmp(containerArgumentCount, containerArguments, argv[i])) {
 				if (argc > i + 1) {
 					sourceIndex = i + 1;
 				}
@@ -138,7 +139,7 @@ int main(char argc, char* argv[]) {
 		else {
 			pContainerFilepath = (char*)malloc(strlen(argv[sourceIndex]));
 			strcpy(pContainerFilepath, argv[sourceIndex]);
-
+			
 			pMessageFilepath = (char*)malloc(strlen(argv[dataIndex]));
 			strcpy(pMessageFilepath, argv[dataIndex]);
 		}
@@ -170,7 +171,7 @@ int main(char argc, char* argv[]) {
 		}
 
 		printf("Variables: \n");
-
+		
 		if (sourceIndex != 0) {
 			printf("container filepath:	%s \n", pContainerFilepath);
 		}
@@ -186,6 +187,96 @@ int main(char argc, char* argv[]) {
 		if (encryptionIndex != 0) {
 			printf("encryption method:	%d \n", encryptionMehtod);
 		}
+		
+		output = getchar(); // to check variables
+
+		printf("\n");
+
+
+
+
+
+
+		// Construct containerHeader
+		struct ContainerHeader containerHeader;
+		output = createContainerHeaderStruct(&containerHeader, pContainerFilepath);
+		if (output != 0) {
+			return 1; // for now
+		}
+		printContainerHeaderStruct(&containerHeader);
+
+		// Construct messageHeader
+		struct MessageHeader messageHeader;
+		output = createMessageHeaderStruct(&messageHeader, pMessageFilepath, strlen(pMessageFilepath), encryptionMehtod);
+		if (output != 0) {
+			return 1; // for now
+		}
+		printMessageHeaderStruct(&messageHeader);
+
+		// Check if container file contains any data
+		if (containerHeader.subChunk2Size < 1) {
+			printf("main: Container file does not have any data");
+			return 1;
+		}
+
+		// Message data length
+		uint32_t messageDataLength;
+		output = fileLength(messageFilepath, &messageDataLength);
+		if (output != 0) {
+			return 1;
+		}
+
+		// Container data length
+		uint32_t containerDataLength;
+		output = fileLength(containerFilepath, &containerDataLength);
+		if (output != 0) {
+			return 1;
+		}
+		
+		int bitsPerByte = 0; // TEMPORARY: MAKE ARGUMENT
+
+
+		char* pContainerData = (char*)malloc(CONTAINER_READ_BUFFER_SIZE);
+		char* pMessageData = (char*)malloc((CONTAINER_READ_BUFFER_SIZE / 8) * bitsPerByte);
+		uint32_t containerBytesLeft = containerDataLength;
+
+		while (containerBytesLeft > 0) {
+			if (containerBytesLeft >= CONTAINER_READ_BUFFER_SIZE) {
+				output = readInContainerData(pContainerData, containerFilepath, containerHeader.subChunk2Size);
+				if (output != 0) {
+					return 1;
+				}
+
+				output = readInMessageData(pMessageData, messageFilepath);
+				if (output != 0) {
+					return 1;
+				}
+
+
+			}
+			else {
+
+			}
+
+
+		}
+
+
+
+
+
+		printf("\ncontainer size: %u \ncontainer first 32 bit data: ", containerDataLength);
+		for (int i = 0; i < 32; i++) {
+			printf("%x ", pContainerData[i]);
+		}
+
+		printf("\nmessage size: %u \nmessage data: ", messageDataLength);
+		for (int i = 0; i < messageDataLength; i++) {
+			printf("%x ", pMessageData[i]);
+		}
+
+
+
 
 		return 0;
 	}

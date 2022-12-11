@@ -8,5 +8,6 @@
 #define MAX_EXTENSION_LENGTH 32
 #define READ_CHUNK_SIZE_BYTES 1024 // 1kB ; when reading or writing container/message/result
 #define WAV_HEADER_SIZE 44 // WAV header size in bytes (without data)
+#define CONTAINER_READ_BUFFER_SIZE 1024 * 1024 * 8
 
 #endif
