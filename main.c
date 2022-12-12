@@ -42,8 +42,8 @@ int main(char argc, char* argv[]) {
 	char* pChachaBlock;
 
 	// !!! DEBUG INPUT !!!
-	pContainerFilepath = "../AudioFiles/BabyElephantWalk60.wav"; // !!! Change to real location after compiling code !!!
-	pMessageFilepath = "../demo.txt";
+	pContainerFilepath = "../../AudioFiles/BabyElephantWalk60.wav"; // !!! Change to real location after compiling code !!!
+	pMessageFilepath = "../../demo.txt";
 	encryptionMethod = 1;
 
 	const ARGUMENT_VARIATIONS = 3;
@@ -151,7 +151,6 @@ int main(char argc, char* argv[]) {
 		}
 
 		// Check if name for output file has been input; else set it to the name of the input file
-		printf("NAMEINDEX: %d\n", nameIndex);
 		if (nameIndex == 0) {
 
 			char* containerFilenameAndExtension = strrchr(pContainerFilepath, '/') + 1;
@@ -167,7 +166,8 @@ int main(char argc, char* argv[]) {
 
 		// Check if output filepath has been input else set it to the filepath of the input file
 		if (resultIndex == 0) {
-			//TODO: set pResultFilepath to the same as input
+			pResultFilepath = (char*)malloc(strlen(argv[containerIndex]));
+			strcpy(pResultFilepath, argv[containerIndex]);
 		}
 		else {
 			pResultFilepath = (char*)malloc(strlen(argv[resultIndex]));
@@ -187,7 +187,7 @@ int main(char argc, char* argv[]) {
 
 		printf("container filepath:	%s \n", pContainerFilepath);
 		printf("message filepath:	%s \n", pMessageFilepath);
-		// printf("result filepath:	%s \n", pResultFilepath);
+		printf("result filepath:	%s \n", pResultFilepath);
 		printf("result name:		%s \n", pResultName);
 		printf("encryption method:	%d \n", encryptionMethod);
 		printf("\n");
@@ -225,14 +225,14 @@ int main(char argc, char* argv[]) {
 		if (output != 0) {
 			return 1;
 		}
-		
+
 		// Container data length
 		uint32_t containerDataLength;
 		output = fileLength(pContainerFilepath, &containerDataLength);
 		if (output != 0) {
 			return 1;
 		}
-		
+
 		int bitsPerByte = 0; // TEMPORARY: MAKE ARGUMENT
 
 
