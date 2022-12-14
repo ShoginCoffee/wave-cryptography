@@ -11,6 +11,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdint.h>
+#include <math.h>
 
 void printb(char binary) {
 	for (int i = 0; i < 8; i++) {
@@ -34,27 +35,30 @@ int main(char argc, char* argv[]) {
 	const char version[] = "1.0";
 
 	// User inputs
-	char* pContainerFilepath;
-	char* pMessageFilepath;
-	char* pResultName;
-	char* pResultFilepath;
+	char* containerFilepath;
+	char* messageFilepath;
+	char* resultName;
+	char* resultDirectory;
 	unsigned char encryptionMethod;
 	char* pChachaBlock;
 
 	// !!! DEBUG INPUT !!!
-	pContainerFilepath = "../AudioFiles/BabyElephantWalk60.wav"; // !!! Change to real location after compiling code !!!
-	pMessageFilepath = "../demo.txt";
+	/*
+	containerFilepath = "../AudioFiles/BabyElephantWalk60.wav"; // !!! Change to real location after compiling code !!!
+	messageFilepath = "../demo.txt";
 	encryptionMethod = 1;
+	*/
+	
 
 	const ARGUMENT_VARIATIONS = 3;
-	char* helpArguments[] = { "-h", "-H", "--help" };
-	char* versionArguments[] = { "-v", "-V", "--version" };
-	char* containerArguments[] = { "-c", "-C", "--container" };
-	char* messageArguments[] = { "-m", "-M", "--message" };
-	char* nameArguments[] = { "-n", "-N", "--name" };
-	char* resultArguments[] = { "-r", "-R", "--result" };
-	char* encryptionArguments[] = { "-s", "-E", "--encryption" };
-	char* chachaArguments[] = { "--chacha" };
+	char const* helpArguments[] = { "-h", "-H", "--help" };
+	char const* versionArguments[] = { "-v", "-V", "--version" };
+	char const* containerArguments[] = { "-c", "-C", "--container" };
+	char const* messageArguments[] = { "-m", "-M", "--message" };
+	char const* resultNameArguments[] = { "-n", "-N", "--name" };
+	char const* resultDirectoryArguments[] = { "-r", "-R", "--result" };
+	char const* encryptionArguments[] = { "-s", "-E", "--encryption" };
+	char const* chachaArguments[] = { "--chacha" };
 
 
 	/* Get the directory where the executable is located
@@ -84,6 +88,7 @@ int main(char argc, char* argv[]) {
 		// Goes througth argv and reads in the options given by the user
 		int i = 0;
 		while (i < argc) {
+			printf("arg: %s \n", argv[i]);
 			if (argCmp(ARGUMENT_VARIATIONS, helpArguments, argv[i])) {
 				printf("usage: crypteo [--help] [--version] [--container <path>] [--message <path>] [--name <value>] [--result <path>] [--encryption <value>] [--chacha <value> <value> <value>]\n\nHelp: documentation of usage of the program [--help] [-h] [-H]\n\nVersion: the version of the program [--version] [-v] [-V]\n\nContainer: path to the container file that the data is is to be hidden within [--container] [-c] [-C]\n\nMessage: path to the message file that has the data that is to be hidden within the container file [--message] [-m] [-M]\n\nName: the name of the new file that has the data hidden within it (without file extension) [--name] [-n] [-N]\n\nResult: Directory where the new file is to be created [--result] [-r] [-R]\n\nEncryption: if the hidden data is to be encrypted and by which algorithm, if no argument is given it defaults to no encryption. 0: no encryption, 1: chacha20. [--encryption] [-e] [-E]\n\nChacha: takes in the key, counter and nonce for the chacha encryption. These should be inputed in hexadecimal. [--encryption] [-e] [-E]");
 				return 0;
@@ -104,13 +109,13 @@ int main(char argc, char* argv[]) {
 				}
 				i++;
 			}
-			else if (argCmp(ARGUMENT_VARIATIONS, nameArguments, argv[i])) {
+			else if (argCmp(ARGUMENT_VARIATIONS, resultNameArguments, argv[i])) {
 				if (argc > i + 1) {
 					nameIndex = i + 1;
 				}
 				i++;
 			}
-			else if (argCmp(ARGUMENT_VARIATIONS, resultArguments, argv[i])) {
+			else if (argCmp(ARGUMENT_VARIATIONS, resultDirectoryArguments, argv[i])) {
 				if (argc > i + 1) {
 					resultIndex = i + 1;
 				}
@@ -143,35 +148,38 @@ int main(char argc, char* argv[]) {
 			return 0;
 		}
 		else {
-			pContainerFilepath = (char*)malloc(strlen(argv[containerIndex]));
-			strcpy(pContainerFilepath, argv[containerIndex]);
+			containerFilepath = (char*)malloc(strlen(argv[containerIndex]));
+			strcpy(containerFilepath, argv[containerIndex]);
 
-			pMessageFilepath = (char*)malloc(strlen(argv[messageIndex]));
-			strcpy(pMessageFilepath, argv[messageIndex]);
+			messageFilepath = (char*)malloc(strlen(argv[messageIndex]));
+			strcpy(messageFilepath, argv[messageIndex]);
 		}
 
 		// Check if name for output file has been input; else set it to the name of the input file
 		printf("NAMEINDEX: %d\n", nameIndex);
 		if (nameIndex == 0) {
-
-			char* containerFilenameAndExtension = strrchr(pContainerFilepath, '/') + 1;
+			char resultNamePrefix[] = "enc_";
+			char* containerFilenameAndExtension = strrchr(containerFilepath, '/') + 1;
 			char* containerExtension = strrchr(containerFilenameAndExtension, '.');
 			size_t containerFilenameLength = containerExtension - containerFilenameAndExtension;
-			pResultName = (char*)malloc(containerFilenameLength);
-			memcpy(pResultName, containerFilenameAndExtension, containerFilenameLength);
+			printf("filenameLength: %zu \n", containerFilenameLength);
+			resultName = (char*)malloc(strlen(resultNamePrefix) + containerFilenameLength + 1); // trailing \0 char
+			memcpy(resultName, resultNamePrefix, strlen(resultNamePrefix));
+			memcpy(resultName + strlen(resultNamePrefix), containerFilenameAndExtension, containerFilenameLength);
+			resultName[containerFilenameLength + strlen(resultNamePrefix)] = '\0';
 		}
 		else {
-			pResultName = (char*)malloc(strlen(argv[nameIndex]));
-			strcpy(pResultName, argv[nameIndex]);
+			resultName = (char*)malloc(strlen(argv[nameIndex]));
+			strcpy(resultName, argv[nameIndex]);
 		}
 
 		// Check if output filepath has been input else set it to the filepath of the input file
 		if (resultIndex == 0) {
-			//TODO: set pResultFilepath to the same as input
+			//TODO: set resultDirectory to the same as input
 		}
 		else {
-			pResultFilepath = (char*)malloc(strlen(argv[resultIndex]));
-			strcpy(pResultFilepath, argv[resultIndex]);
+			resultDirectory = (char*)malloc(strlen(argv[resultIndex]));
+			strcpy(resultDirectory, argv[resultIndex]);
 		}
 
 		// Check if encryption method has been input else set it to 0 (no encryption)
@@ -185,99 +193,51 @@ int main(char argc, char* argv[]) {
 		/* Print out arguments passed to program */
 		printf("Variables: \n");
 
-		printf("container filepath:	%s \n", pContainerFilepath);
-		printf("message filepath:	%s \n", pMessageFilepath);
-		// printf("result filepath:	%s \n", pResultFilepath);
-		printf("result name:		%s \n", pResultName);
+		printf("container filepath:	%s \n", containerFilepath);
+		printf("message filepath:	%s \n", messageFilepath);
+		// printf("result filepath:	%s \n", resultDirectory);
+		printf("result name:		%s \n", resultName);
 		printf("encryption method:	%d \n", encryptionMethod);
 		printf("\n");
 
 
 
+		// TEMP. TODO: MAKE ARGUMENTS
+		uint32_t key[] = {
+		0x03020100, 0x07060504, 0x0b0a0908, 0x0f0e0d0c,
+		0x13121110, 0x17161514, 0x1b1a1918, 0x1f1e1d1c
+		};
+		uint32_t counter[] = { 0x00000001 };
+		uint32_t nonce[] = { 0x00000000, 0x4a000000, 0x00000000 };
 
+		int encodingBitsPerSample = 3; // TEMP. TODO: MAKE ARGUMENT
 
+		// resultFullPath is filepath + name + extension for result file
+		int resultFullPathLength = strlen(resultDirectory) + strlen(resultName) + strlen(".wav");
 
-		// Construct containerHeader
-		struct ContainerHeader containerHeader;
-		output = createContainerHeaderStruct(&containerHeader, pContainerFilepath);
-		if (output != 0) {
-			return 1; // for now
+		if (resultDirectory[strlen(resultDirectory) - 1] != '/' && resultDirectory[strlen(resultDirectory) - 1] != '\\') {
+			resultFullPathLength++;			// REMOVE IF: a '/' is guranteed in resultDirectory
 		}
-		printContainerHeaderStruct(&containerHeader);
+		char* resultFullPath = malloc(resultFullPathLength);
+		strcpy(resultFullPath, resultDirectory);
 
-		// Construct messageHeader
-		struct MessageHeader messageHeader;
-		output = createMessageHeaderStruct(&messageHeader, pMessageFilepath, strlen(pMessageFilepath), encryptionMethod);
-		if (output != 0) {
-			return 1; // for now
-		}
-		printMessageHeaderStruct(&messageHeader);
-
-		// Check if container file contains any data
-		if (containerHeader.subChunk2Size < 1) {
-			printf("main: Container file does not have any data");
-			return 1;
+		if (resultDirectory[strlen(resultDirectory) - 1] != '/' && resultDirectory[strlen(resultDirectory) - 1] != '\\') {
+			strcat(resultFullPath, "/");	// REMOVE IF: a '/' is guranteed in resultDirectory
 		}
 
-		// Message data length
-		uint32_t messageDataLength;
-		output = fileLength(pMessageFilepath, &messageDataLength);
-		if (output != 0) {
-			return 1;
-		}
-		
-		// Container data length
-		uint32_t containerDataLength;
-		output = fileLength(pContainerFilepath, &containerDataLength);
-		if (output != 0) {
-			return 1;
-		}
-		
-		int bitsPerByte = 0; // TEMPORARY: MAKE ARGUMENT
+		strcat(resultFullPath, resultName);
+		strcat(resultFullPath, ".wav");
 
-
-		char* pContainerData = (char*)malloc(CONTAINER_READ_BUFFER_SIZE);
-		char* pMessageData = (char*)malloc((CONTAINER_READ_BUFFER_SIZE / 8) * bitsPerByte);
-		uint32_t containerBytesLeft = containerDataLength;
-
-		while (containerBytesLeft > 0) {
-			if (containerBytesLeft >= CONTAINER_READ_BUFFER_SIZE) {
-				output = readInContainerData(pContainerData, pContainerFilepath, containerHeader.subChunk2Size);
-				if (output != 0) {
-					return 1;
-				}
-
-				output = readInMessageData(pMessageData, pMessageFilepath);
-				if (output != 0) {
-					return 1;
-				}
-
-
-			}
-			else {
-
-			}
-
-
-		}
-
-
-
-		printf("\ncontainer size: %u \ncontainer first 32 bit data: ", containerDataLength);
-		for (int i = 0; i < 32; i++) {
-			printf("%x ", pContainerData[i]);
-		}
-
-		printf("\nmessage size: %u \nmessage data: ", messageDataLength);
-		for (int i = 0; i < messageDataLength; i++) {
-			printf("%x ", pMessageData[i]);
-		}
+		output = encodeMessageInWavFile(encryptionMethod, resultFullPath, containerFilepath, messageFilepath, encodingBitsPerSample, key, counter, nonce);
+		if (output != 0) return 1;
 
 
 
 
 		return 0;
 	}
+
+	/*
 
 	// List Directories
 	char path[] = ".";
@@ -299,7 +259,7 @@ int main(char argc, char* argv[]) {
 
 	// Declare and construct messageHeader
 	struct MessageHeader messageHeader;
-	output = createMessageHeaderStruct(&messageHeader, pMessageFilepath, strlen(pMessageFilepath), encryptionMethod);
+	output = createMessageHeaderStruct(&messageHeader, messageFilepath, strlen(messageFilepath), encryptionMethod);
 	if (output != 0) {
 		return 1; // for now
 	}
@@ -310,13 +270,13 @@ int main(char argc, char* argv[]) {
 	// Read in message file and message file length
 
 	uint32_t messageDataLength;
-	output = fileLength(pMessageFilepath, &messageDataLength);
+	output = fileLength(messageFilepath, &messageDataLength);
 	if (output != 0) {
 		return 1;
 	}
 
 	char* pMessageData = (char*)malloc(messageDataLength);
-	output = readInMessageData(pMessageData, pMessageFilepath);
+	output = readInMessageData(pMessageData, messageFilepath, messageDataLength, 0);
 	if (output != 0) {
 		return 1;
 	}
@@ -338,16 +298,13 @@ int main(char argc, char* argv[]) {
 	uint32_t containerDataLength;
 	output = fileLength(pContainerFilepath, &containerDataLength);
 	if (output != 0) {
-		free(pMessageData);
 		return 1;
 	}
 
-	char* pContainerData = (char*)malloc(containerDataLength);
-	output = readInContainerData(pContainerData, pContainerFilepath, containerHeader.subChunk2Size);
+	char* pContainerData = malloc(containerDataLength);
+	output = readInContainerData(pContainerData, pContainerFilepath, containerHeader.subChunk2Size, 0);
 
 	if (output != 0) {
-		free(pMessageData);
-		free(pContainerData);
 		return 1;
 	}
 
@@ -371,7 +328,7 @@ int main(char argc, char* argv[]) {
 
 	unsigned char message[] = { 0xff, 0xff };
 	int sampleSize = 2;
-	int bitsPerSample = 2;
+	int encodingBitsPerSample = 2;
 
 	printf("input data: \n");
 	for (int i = 0; i < sizeof(data); i++) {
@@ -388,9 +345,9 @@ int main(char argc, char* argv[]) {
 	printf("\n");
 
 	printf("sample size: %d \n", sampleSize);
-	printf("bits per sample: %d \n\n", bitsPerSample);
+	printf("bits per sample: %d \n\n", encodingBitsPerSample);
 
-	encodeMessage(data, sizeof(data), sampleSize, bitsPerSample, message, sizeof(message));
+	encodeMessage(data, sizeof(data), sampleSize, encodingBitsPerSample, message, sizeof(message));
 
 
 	printf("output data: \n");
@@ -442,6 +399,6 @@ int main(char argc, char* argv[]) {
 		if ((a + 1) % 16 == 0 && a != 0) printf("\n");
 	}
 
-
+	*/
 	return 0;
 }

@@ -124,11 +124,11 @@ void chacha20(uint8_t* cryptText, uint64_t cryptTextLength, uint32_t* pKey, uint
     uint8_t serialized[64];
 
     // chacha20 magic
-    do{
+    do {
         // chacha20
         populateBlock(&workingBlock, pKey, pCounter, pNonce);
         chacha20Block(&workingBlock);
-        serializeBlock(&serialized, &workingBlock);
+        serializeBlock(serialized, &workingBlock);
         length = bytesToCryptLeft % 64 == bytesToCryptLeft ? bytesToCryptLeft : 64;
         xorStreams(cryptText, step*64, length, serialized);
 

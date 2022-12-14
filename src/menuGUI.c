@@ -1,7 +1,7 @@
 #include "menuGUI.h"
 
 void getUserInputInt(int *pUserInput){
-    scanf("%d", pUserInput);
+    int output = scanf("%d", pUserInput);
     while(getchar() != '\n'); // gets rid of unwanted chars in stdin
 }
 
@@ -11,7 +11,7 @@ void help(){
     printf("information placeholder.");
     printf("\n");
     printf("press Enter to go back.\n\n");
-    getchar();
+    int output = getchar();
     while(getchar() != '\n'); // gets rid of unwanted chars in stdin
 }
 

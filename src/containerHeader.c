@@ -5,8 +5,9 @@
 #include <errno.h>
 #include <string.h>
 
-// takes in file path and returns header struct
 int createContainerHeaderStruct(struct ContainerHeader* pContainerHeader, char* pContainerFilepath) {
+    // WAV file validity
+
     uint32_t containerFileSize;
     int output = fileLength(pContainerFilepath, &containerFileSize);
 
@@ -55,6 +56,12 @@ int createContainerHeaderStruct(struct ContainerHeader* pContainerHeader, char* 
     // AudioFormat 2 byte LE converted to BE
     bytesRead = fread(buffer2, sizeof(buffer2), 1, pFile);
     pContainerHeader->audioFormat = charLEToIntBE(buffer2);
+    if (pContainerHeader->audioFormat != 1) {
+        printf("error in createContainerHeaderStruct(): \n");
+        printf("WAV file in filepath[%s]: \n", pContainerFilepath);
+        printf("audio format is not of type PCM (audiformat in header must be equal to 1) \n");
+        return 1;
+    }
 
     // NumChannels 2 byte LE converted to BE
     bytesRead = fread(buffer2, sizeof(buffer2), 1, pFile);
@@ -110,5 +117,90 @@ int printContainerHeaderStruct(struct ContainerHeader* pContainerHeader) {
 
     printf("\n");
 
+    return 0;
+}
+
+int containerHeaderToArr(char* destinationArr, char* pContainerFilepath) {
+    // WAV file validity
+    
+    uint32_t containerFileSize;
+    int output = fileLength(pContainerFilepath, &containerFileSize);
+
+    if (output != 0) {
+        printf("error in createContainerHeaderStruct() \n"); // REMOVE BEFORE RELEASE
+        return 1;
+    }
+
+    if (containerFileSize < WAV_HEADER_SIZE) {
+        printf("error in containerHeaderToArr() \n"); // REMOVE BEFORE RELEASE
+        printf("invalid WAV file: invalid header length \n");
+        return 1;
+    }
+
+    errno = 0;
+    FILE* pFile = fopen(pContainerFilepath, "rb");
+
+    if (pFile == NULL) {
+        printf("error in containerHeaderToArr() \n"); // REMOVE BEFORE RELEASE
+        printf("Could not access file in filepath[%s]: \n%s \n", pContainerFilepath, strerror(errno));
+        return 1;
+    }
+
+    // read header into array
+    int bytesWritten = 0;
+
+    // ChunkID 4 byte BE
+    int bytesRead = fread(destinationArr, sizeof(uint32_t), 1, pFile);
+    bytesWritten += 4;
+
+    // ChunkSize 4 byte LE converted to BE
+    bytesRead = fread((destinationArr + bytesWritten), sizeof(uint32_t), 1, pFile);
+    bytesWritten += 4;
+
+    // Format 4 byte BE
+    bytesRead = fread((destinationArr + bytesWritten), sizeof(uint32_t), 1, pFile);
+    bytesWritten += 4;
+
+    // SubChunk1ID 4 byte BE
+    bytesRead = fread((destinationArr + bytesWritten), sizeof(uint32_t), 1, pFile);
+    bytesWritten += 4;
+
+    // SubChunk1Size 4 byte LE converted to BE
+    bytesRead = fread((destinationArr + bytesWritten), sizeof(uint32_t), 1, pFile);
+    bytesWritten += 4;
+
+    // AudioFormat 2 byte LE converted to BE
+    bytesRead = fread((destinationArr + bytesWritten), sizeof(uint16_t), 1, pFile);
+    bytesWritten += 2;
+
+    // NumChannels 2 byte LE converted to BE
+    bytesRead = fread((destinationArr + bytesWritten), sizeof(uint16_t), 1, pFile);
+    bytesWritten += 2;
+
+    // SampleRate 4 byte LE converted to BE
+    bytesRead = fread((destinationArr + bytesWritten), sizeof(uint32_t), 1, pFile);
+    bytesWritten += 4;
+
+    // ByteRate 4 byte LE converted to BE
+    bytesRead = fread((destinationArr + bytesWritten), sizeof(uint32_t), 1, pFile);
+    bytesWritten += 4;
+
+    // BlockAlign 2 byte LE converted to BE
+    bytesRead = fread((destinationArr + bytesWritten), sizeof(uint16_t), 1, pFile);
+    bytesWritten += 2;
+
+    // BitsPerSample 2 byte LE converted to BE
+    bytesRead = fread((destinationArr + bytesWritten), sizeof(uint16_t), 1, pFile);
+    bytesWritten += 2;
+
+    // SubChunk2ID 4 byte BE
+    bytesRead = fread((destinationArr + bytesWritten), sizeof(uint32_t), 1, pFile);
+    bytesWritten += 4;
+
+    // SubChunk2Size 4 byte LE converted to BE
+    bytesRead = fread((destinationArr + bytesWritten), sizeof(uint32_t), 1, pFile);
+    bytesWritten += 4;
+
+    fclose(pFile);
     return 0;
 }
