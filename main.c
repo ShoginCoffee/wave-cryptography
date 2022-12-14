@@ -11,7 +11,6 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdint.h>
-#include <math.h>
 
 void printb(char binary) {
 	for (int i = 0; i < 8; i++) {
@@ -34,22 +33,17 @@ int main(char argc, char* argv[]) {
 	int output;
 	const char version[] = "1.0";
 
+
 	// User inputs
 	char* containerFilepath;
 	char* messageFilepath;
 	char* resultName;
 	char* resultDirectory;
 	unsigned char encryptionMethod;
-	char* pChachaBlock;
+	unsigned int chachaBlock[3];
 
-	// !!! DEBUG INPUT !!!
-	/*
-	containerFilepath = "../AudioFiles/BabyElephantWalk60.wav"; // !!! Change to real location after compiling code !!!
-	messageFilepath = "../demo.txt";
-	encryptionMethod = 1;
-	*/
-	
 
+	// Argument variations
 	const ARGUMENT_VARIATIONS = 3;
 	char const* helpArguments[] = { "-h", "-H", "--help" };
 	char const* versionArguments[] = { "-v", "-V", "--version" };
@@ -61,14 +55,11 @@ int main(char argc, char* argv[]) {
 	char const* chachaArguments[] = { "--chacha" };
 
 
-	/* Get the directory where the executable is located
-	char string[255];
-	GetCurrentDirectory(255, &string);
-	printf("%s\n", string);
-	*/
-
 	// GUI or CLI
 	if (argc == 1) {
+		printf("GUI");
+		return 0;
+
 		// GUI menu
 		// int nothing = GUIMenu();
 
@@ -101,37 +92,31 @@ int main(char argc, char* argv[]) {
 				if (argc > i + 1) {
 					containerIndex = i + 1;
 				}
-				i++;
 			}
 			else if (argCmp(ARGUMENT_VARIATIONS, messageArguments, argv[i])) {
 				if (argc > i + 1) {
 					messageIndex = i + 1;
 				}
-				i++;
 			}
 			else if (argCmp(ARGUMENT_VARIATIONS, resultNameArguments, argv[i])) {
 				if (argc > i + 1) {
 					nameIndex = i + 1;
 				}
-				i++;
 			}
 			else if (argCmp(ARGUMENT_VARIATIONS, resultDirectoryArguments, argv[i])) {
 				if (argc > i + 1) {
 					resultIndex = i + 1;
 				}
-				i++;
 			}
 			else if (argCmp(ARGUMENT_VARIATIONS, encryptionArguments, argv[i])) {
 				if (argc > i + 1) {
 					encryptionIndex = i + 1;
 				}
-				i++;
 			}
 			else if (argCmp(1, chachaArguments, argv[i])) {
 				if (argc > i + 3) {
 					chachaIndex = i + 1;
 				}
-				i += 3;
 			}
 
 			i++;
@@ -156,7 +141,6 @@ int main(char argc, char* argv[]) {
 		}
 
 		// Check if name for output file has been input; else set it to the name of the input file
-		printf("NAMEINDEX: %d\n", nameIndex);
 		if (nameIndex == 0) {
 			char resultNamePrefix[] = "enc_";
 			char* containerFilenameAndExtension = strrchr(containerFilepath, '/') + 1;
@@ -175,7 +159,8 @@ int main(char argc, char* argv[]) {
 
 		// Check if output filepath has been input else set it to the filepath of the input file
 		if (resultIndex == 0) {
-			//TODO: set resultDirectory to the same as input
+			resultDirectory = (char*)malloc(strlen(argv[containerIndex]));
+			strcpy(resultDirectory, argv[containerIndex]);
 		}
 		else {
 			resultDirectory = (char*)malloc(strlen(argv[resultIndex]));
@@ -184,22 +169,48 @@ int main(char argc, char* argv[]) {
 
 		// Check if encryption method has been input else set it to 0 (no encryption)
 		if (encryptionIndex == 0) {
+
 			encryptionMethod = 0;
 		}
 		else {
 			encryptionMethod = atoi(argv[encryptionIndex]);
+
+			if (encryptionMethod == 1) {
+				// Check if chacha block have been input
+				if (chachaIndex == 0) {
+					printf("Chacha arguments are required");
+					return  0;
+				}
+				else {
+					for (int i = 0; i < 3; i++) {
+						chachaBlock[i] = atoi(argv[chachaIndex + i]);
+					}
+				}
+
+
+			}
+
+
 		}
+
 
 		/* Print out arguments passed to program */
 		printf("Variables: \n");
-
 		printf("container filepath:	%s \n", containerFilepath);
 		printf("message filepath:	%s \n", messageFilepath);
-		// printf("result filepath:	%s \n", resultDirectory);
+		printf("result filepath:	%s \n", resultDirectory);
 		printf("result name:		%s \n", resultName);
 		printf("encryption method:	%d \n", encryptionMethod);
+		printf("chacha key:	        %d \n", chachaBlock[0]);
+		printf("chacha counter:	        %d \n", chachaBlock[1]);
+		printf("chacha nonce:	        %d \n", chachaBlock[2]);
 		printf("\n");
 
+		/*// Get the directory where the executable is located
+		char string[255];
+		GetCurrentDirectory(255, &string);
+		printf("%s\n", string);
+		*/
 
 
 		// TEMP. TODO: MAKE ARGUMENTS
@@ -209,6 +220,7 @@ int main(char argc, char* argv[]) {
 		};
 		uint32_t counter[] = { 0x00000001 };
 		uint32_t nonce[] = { 0x00000000, 0x4a000000, 0x00000000 };
+
 
 		int encodingBitsPerSample = 3; // TEMP. TODO: MAKE ARGUMENT
 
@@ -225,6 +237,7 @@ int main(char argc, char* argv[]) {
 			strcat(resultFullPath, "/");	// REMOVE IF: a '/' is guranteed in resultDirectory
 		}
 
+
 		strcat(resultFullPath, resultName);
 		strcat(resultFullPath, ".wav");
 
@@ -233,12 +246,14 @@ int main(char argc, char* argv[]) {
 
 
 
-
 		return 0;
 	}
 
 	/*
+<<<<<<< HEAD
 
+=======
+>>>>>>> d0574864b09b926bf6810fee42cf3587ae530b1e
 	// List Directories
 	char path[] = ".";
 	output = listDirectoryContents(path);
@@ -398,7 +413,7 @@ int main(char argc, char* argv[]) {
 		printf("%x ", plainText[a]);
 		if ((a + 1) % 16 == 0 && a != 0) printf("\n");
 	}
-
 	*/
+
 	return 0;
 }

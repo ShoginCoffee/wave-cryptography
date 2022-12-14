@@ -135,7 +135,7 @@ int encodeMessageInWavFile(int encryptionMethod, char* resultFilepath, char* con
 	printf("containerBytesRead: %zu \n", containerBytesRead);
 
 	printf("pContainerData: \n");
-	for (int i = 1; i < containerReadBufferSize; i += 2) {
+	for (int i = 0; i < containerReadBufferSize; i += 1) {
 		printb(pContainerData[i]);
 		printf(" ");
 	}
@@ -143,16 +143,18 @@ int encodeMessageInWavFile(int encryptionMethod, char* resultFilepath, char* con
 
 	printf("pMessageData: \n");
 	for (int i = 0; i < encryptionMethodSize; i++) {
-		printb(pMessageData[i]);
+		printb(messageHeader.encryptionMethod);
 		printf(" ");
 	}
 	printf("\n");
 
+
 	// encode encryptionMethod in container data
-	encodeMessage(pContainerData, containerReadBufferSize, sampleSize, encodingBitsPerSampleMessageHeader, &messageHeader.encryptionMethod, encryptionMethodSize);
+	encodeMessage(pContainerData, containerReadBufferSize, sampleSize, encodingBitsPerSampleMessageHeader, &(messageHeader.encryptionMethod), encryptionMethodSize);
+
 
 	printf("pContainerData: \n");
-	for (int i = 1; i < containerReadBufferSize; i += 2) {
+	for (int i = 0; i < containerReadBufferSize; i += 1) {
 		printb(pContainerData[i]);
 		printf(" ");
 	}
@@ -320,16 +322,13 @@ void encodeMessage(char* containerData, int containerDataLength, int sampleSize,
     // loop all samples
     for(i = sampleSize - 1; i < containerDataLength; i += sampleSize){
         // for every sample
-        //printf("sample %d: \n\n", i);
         if(messageLength != messageByte){
             for(t = 0; t < bitsPerSample; t++){
-                                //printf("changing bit %d: \n\n", t);
                 // 1. take bit from message byte
                 bit = (( *(message + messageByte) << messageBit) & 0xff) >> 7;
-                                //printf("bit to encode: %d \n\n", bit);
                 // 2. encode bit in data
                 encodeBitInByte((containerData + i), bit, t);
-                // 3. update messageData counters
+				// 3. update messageData counters
                 if(messageBit + 1 == 8) messageByte++;
                 messageBit = (messageBit + 1) % 8;
                 // 4. if message has been encoded: break
