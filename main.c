@@ -41,6 +41,7 @@ int main(char argc, char* argv[]) {
 	char* resultDirectory;
 	unsigned char encryptionMethod;
 	unsigned int chachaBlock[3];
+	unsigned int isDecode;
 
 
 	// Argument variations
@@ -75,6 +76,7 @@ int main(char argc, char* argv[]) {
 		char resultIndex = 0;
 		char encryptionIndex = 0;
 		char chachaIndex = 0;
+		char decodeIndex = 0;
 
 		// Goes througth argv and reads in the options given by the user
 		int i = 0;
@@ -117,6 +119,9 @@ int main(char argc, char* argv[]) {
 				if (argc > i + 3) {
 					chachaIndex = i + 1;
 				}
+			}
+			else if (argCmp(1, decodeArguments, argv[i])) {
+				decodeIndex = i;
 			}
 
 			i++;
@@ -193,6 +198,9 @@ int main(char argc, char* argv[]) {
 
 		}
 
+		// Check if user wants to decode or encode
+		isDecode = decodeIndex == 0;
+
 
 		/* Print out arguments passed to program */
 		printf("Variables: \n");
@@ -230,13 +238,13 @@ int main(char argc, char* argv[]) {
 		if (resultDirectory[strlen(resultDirectory) - 1] != '/' && resultDirectory[strlen(resultDirectory) - 1] != '\\') {
 			resultFullPathLength++;			// REMOVE IF: a '/' is guranteed in resultDirectory
 		}
+
 		char* resultFullPath = malloc(resultFullPathLength);
 		strcpy(resultFullPath, resultDirectory);
 
 		if (resultDirectory[strlen(resultDirectory) - 1] != '/' && resultDirectory[strlen(resultDirectory) - 1] != '\\') {
 			strcat(resultFullPath, "/");	// REMOVE IF: a '/' is guranteed in resultDirectory
 		}
-
 
 		strcat(resultFullPath, resultName);
 		strcat(resultFullPath, ".wav");
@@ -249,11 +257,8 @@ int main(char argc, char* argv[]) {
 		return 0;
 	}
 
-	/*
-<<<<<<< HEAD
 
-=======
->>>>>>> d0574864b09b926bf6810fee42cf3587ae530b1e
+	/*
 	// List Directories
 	char path[] = ".";
 	output = listDirectoryContents(path);
