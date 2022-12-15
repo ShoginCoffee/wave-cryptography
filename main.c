@@ -53,7 +53,8 @@ int main(char argc, char* argv[]) {
 	char const* resultNameArguments[] = { "-n", "-N", "--name" };
 	char const* resultDirectoryArguments[] = { "-r", "-R", "--result" };
 	char const* encryptionArguments[] = { "-s", "-E", "--encryption" };
-	char const* chachaArguments[] = { "--chacha" };
+	char const* chachaArguments[] = { "--chacha", "--chacha", "--chacha" };
+	char const* decodeArguments[] = { "--decode", "--decode", "--decode" };
 
 
 	// GUI or CLI
@@ -166,6 +167,10 @@ int main(char argc, char* argv[]) {
 		if (resultIndex == 0) {
 			resultDirectory = (char*)malloc(strlen(argv[containerIndex]));
 			strcpy(resultDirectory, argv[containerIndex]);
+			// TODO: remove file from filepath
+			char* pFileName = strrchr(argv[containerIndex], '/') + 1;
+			int pFilepathLength = pFileName - argv[containerIndex];
+			resultDirectory[pFilepathLength] = '\0';
 		}
 		else {
 			resultDirectory = (char*)malloc(strlen(argv[resultIndex]));
@@ -230,9 +235,11 @@ int main(char argc, char* argv[]) {
 		uint32_t nonce[] = { 0x00000000, 0x4a000000, 0x00000000 };
 
 
-		int encodingBitsPerSample = 3; // TEMP. TODO: MAKE ARGUMENT
+		int encodingBitsPerSample = 1; // TEMP. TODO: MAKE ARGUMENT
 
 		// resultFullPath is filepath + name + extension for result file
+		printf("resultDirectory: %s \n", resultDirectory);
+		printf("resultName: %s \n", resultName);
 		int resultFullPathLength = strlen(resultDirectory) + strlen(resultName) + strlen(".wav");
 
 		if (resultDirectory[strlen(resultDirectory) - 1] != '/' && resultDirectory[strlen(resultDirectory) - 1] != '\\') {
@@ -248,6 +255,8 @@ int main(char argc, char* argv[]) {
 
 		strcat(resultFullPath, resultName);
 		strcat(resultFullPath, ".wav");
+
+		printf("resultFullPath: %s \n", resultFullPath);
 
 		output = encodeMessageInWavFile(encryptionMethod, resultFullPath, containerFilepath, messageFilepath, encodingBitsPerSample, key, counter, nonce);
 		if (output != 0) return 1;
