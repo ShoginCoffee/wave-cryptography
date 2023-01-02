@@ -100,7 +100,7 @@ int encodeMessageInWavFile(int encryptionMethod, char* resultFilepath, char* con
 	char* pContainerData = (char*)malloc(CONTAINER_READ_BUFFER_SIZE);
 	char* pMessageData = (char*)malloc(MESSAGE_READ_BUFFER_SIZE);
 	
-	const int sampleSize = (containerHeader.bitsPerSample / 8) / containerHeader.numChannels; // in bytes
+	const int sampleSize = containerHeader.bitsPerSample / 8; // in bytes
 	const int encodingBitsPerSampleMessageHeader = 1; // how many bits to use per sample for encoding message header
 
 	// message header size
