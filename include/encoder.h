@@ -3,6 +3,8 @@
 
 #include <stdint.h>
 
+void samplesEndianSwitch(char* samples, uint32_t samplesByteLength, int sampleSize);
+
 int encodeMessageInWavFile(int encryptionMethod, char* resultFilepath, char* containerFilepath, char* messageFilepath, int encodingBitsPerSample, uint32_t* key, uint32_t* counter, uint32_t* nonce);
 
 void encodeMessage(char* containerData, int dataLength, int sampleSize, int bitsPerByte, char* message, unsigned int messageLength);

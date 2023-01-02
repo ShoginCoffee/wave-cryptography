@@ -16,12 +16,19 @@ int fileLength(char* pFilepath, uint32_t* pFileLength) {
         return 1;
     }
 
+
 	fseek(pFile, 0, SEEK_END);
-	unsigned int fileLength = ftell(pFile);
+	uint32_t fileLength = ftell(pFile);
 
 	fclose(pFile);
 	*(pFileLength) = fileLength;
 	return 0;
+}
+
+void printb(char binary) {
+	for (int i = 0; i < 8; i++) {
+		printf("%x", ((binary << i) & 0xff) >> 7);
+	}
 }
 
 int listDirectoryContents(char* sDir) {

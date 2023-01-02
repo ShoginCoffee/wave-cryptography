@@ -12,12 +12,6 @@
 #include <stdio.h>
 #include <stdint.h>
 
-void printb(char binary) {
-	for (int i = 0; i < 8; i++) {
-		printf("%x", ((binary << i) & 0xff) >> 7);
-	}
-}
-
 // returns 1 if ANY of the strings match the arg ELSE returns 0
 int argCmp(int numberOfStrings, const char** compareStrings, char* compareArg) {
 	int cmpResult;
@@ -175,6 +169,9 @@ int main(char argc, char* argv[]) {
 		else {
 			resultDirectory = (char*)malloc(strlen(argv[resultIndex]));
 			strcpy(resultDirectory, argv[resultIndex]);
+			if (resultDirectory[strlen(resultDirectory) - 1] != '/') {
+				strcat(resultDirectory, "/");
+			}
 		}
 
 		// Check if encryption method has been input else set it to 0 (no encryption)
@@ -211,7 +208,7 @@ int main(char argc, char* argv[]) {
 		printf("Variables: \n");
 		printf("container filepath:	%s \n", containerFilepath);
 		printf("message filepath:	%s \n", messageFilepath);
-		printf("result filepath:	%s \n", resultDirectory);
+		printf("result directory:	%s \n", resultDirectory);
 		printf("result name:		%s \n", resultName);
 		printf("encryption method:	%d \n", encryptionMethod);
 		printf("chacha key:	        %d \n", chachaBlock[0]);
@@ -235,23 +232,23 @@ int main(char argc, char* argv[]) {
 		uint32_t nonce[] = { 0x00000000, 0x4a000000, 0x00000000 };
 
 
-		int encodingBitsPerSample = 1; // TEMP. TODO: MAKE ARGUMENT
+		int encodingBitsPerSample = 2; // TEMP. TODO: MAKE ARGUMENT
 
 		// resultFullPath is filepath + name + extension for result file
-		printf("resultDirectory: %s \n", resultDirectory);
-		printf("resultName: %s \n", resultName);
 		int resultFullPathLength = strlen(resultDirectory) + strlen(resultName) + strlen(".wav");
 
+		/*
 		if (resultDirectory[strlen(resultDirectory) - 1] != '/' && resultDirectory[strlen(resultDirectory) - 1] != '\\') {
 			resultFullPathLength++;			// REMOVE IF: a '/' is guranteed in resultDirectory
-		}
+		}*/
 
 		char* resultFullPath = malloc(resultFullPathLength);
 		strcpy(resultFullPath, resultDirectory);
 
+		/*
 		if (resultDirectory[strlen(resultDirectory) - 1] != '/' && resultDirectory[strlen(resultDirectory) - 1] != '\\') {
 			strcat(resultFullPath, "/");	// REMOVE IF: a '/' is guranteed in resultDirectory
-		}
+		}*/
 
 		strcat(resultFullPath, resultName);
 		strcat(resultFullPath, ".wav");
@@ -260,8 +257,6 @@ int main(char argc, char* argv[]) {
 
 		output = encodeMessageInWavFile(encryptionMethod, resultFullPath, containerFilepath, messageFilepath, encodingBitsPerSample, key, counter, nonce);
 		if (output != 0) return 1;
-
-
 
 		return 0;
 	}

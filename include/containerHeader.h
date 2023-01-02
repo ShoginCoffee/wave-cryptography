@@ -24,9 +24,17 @@ struct ContainerHeader {
 	uint32_t subChunk2Size;		// 4LE data chunk size: NumSamples * NumChannels * BytesPerSample - (size of the next chunk that will be read)
 };
 
+int read4ByteElement(FILE* pFile, uint32_t* pContainerBytesLeft, uint32_t* destElement);
+
+int read2ByteElement(FILE* pFile, uint32_t* pContainerBytesLeft, uint32_t* destElement);
+
+int seekSubChunk(char seekedSubChunkID[], uint32_t* bytesLeft, char* destID, FILE* pFile);
+
+int byteReadErrorCheck(int bytesRead, int bytesNeeded);
+
 int createContainerHeaderStruct(struct ContainerHeader* pContainerHeader, char* pContainerFilepath);
 
 int printContainerHeaderStruct(struct ContainerHeader* pContainerHeader);
 
-int containerHeaderToArr(char* destinationArr, char* pContainerFilepath);
+int containerHeaderToArr(char* destinationArr, char* pContainerFilepath, unsigned int headerLength);
 #endif

@@ -11,6 +11,21 @@
 #include <string.h>
 #include <math.h>
 
+void samplesEndianSwitch(char* samples, uint32_t samplesByteLength, int sampleSize) {
+	char temp;
+	for (int i = 0; i < samplesByteLength - sampleSize; i += sampleSize) {
+		int start = i;
+		int end = start + sampleSize - 1;
+		while (start < end) {
+			temp = samples[start];
+			samples[start] = samples[end];
+			samples[end] = temp;
+			start++;
+			end--;
+		}
+	}
+}
+
 int encodeMessageInWavFile(int encryptionMethod, char* resultFilepath, char* containerFilepath, char* messageFilepath, int encodingBitsPerSample, uint32_t* key, uint32_t* counter, uint32_t* nonce) {
 	int output;
 	
@@ -18,9 +33,7 @@ int encodeMessageInWavFile(int encryptionMethod, char* resultFilepath, char* con
 
 	// Construct containerHeader
 	struct ContainerHeader containerHeader;
-	printf("container filepath: %s .\n", containerFilepath);
 	output = createContainerHeaderStruct(&containerHeader, containerFilepath);
-	printf("output: %d \n", output);
 	if (output != 0) {
 		return 1; // for now
 	}
@@ -32,8 +45,6 @@ int encodeMessageInWavFile(int encryptionMethod, char* resultFilepath, char* con
 	if (output != 0) return 1;
 
 	printMessageHeaderStruct(&messageHeader);
-	printf("messageFilepath: [%s] \n", messageFilepath);
-	printf("resultFilenameLength: %d \n", messageHeader.filenameLength);
 
 	// Check if container file contains any data
 	if (containerHeader.subChunk2Size < 1) {
@@ -42,11 +53,7 @@ int encodeMessageInWavFile(int encryptionMethod, char* resultFilepath, char* con
 	}
 
 	// Message data length
-	uint32_t messageDataLength;
-	output = fileLength(messageFilepath, &messageDataLength);
-	if (output != 0) {
-		return 1;
-	}
+	uint32_t messageDataLength = messageHeader.subChunk2Size;
 
 	// Container data length
 	uint32_t containerDataLength;
@@ -65,28 +72,40 @@ int encodeMessageInWavFile(int encryptionMethod, char* resultFilepath, char* con
 		return 1;
 	}
 
+	// variables
+	uint64_t containerBytesLeft = containerDataLength;
+	uint64_t containerBytesRead = 0;
+
 	// WRITE WAV HEADER TO RESULT
 
-	char wavHeader[WAV_HEADER_SIZE];
-	output = containerHeaderToArr(wavHeader, containerFilepath);
+	uint32_t wavHeaderSize = containerDataLength - containerHeader.subChunk2Size;
+	char* wavHeader = malloc(wavHeaderSize);
+	
+	output = containerHeaderToArr(wavHeader, containerFilepath, wavHeaderSize);
 	if (output != 0) return 1;
-	fwrite(wavHeader, WAV_HEADER_SIZE, 1, pResultFile);
 
-	// INITIALIZE VARIABLES
+	containerBytesLeft -= wavHeaderSize;
+	containerBytesRead += wavHeaderSize;
+	
+	fwrite(wavHeader, wavHeaderSize, 1, pResultFile);
 
-	// encoder data arrays and constants
-	const uint32_t MESSAGE_READ_BUFFER_SIZE = (CONTAINER_READ_BUFFER_SIZE / 8) * encodingBitsPerSample;
+	free(wavHeader);
+
+	
+	// VARIABLES FOR WRITING MESSAGE HEADER TO RESULT
+
+	// data arrays for storing message and container reads
+	const uint32_t MESSAGE_READ_BUFFER_SIZE = (CONTAINER_READ_BUFFER_SIZE / 8) * encodingBitsPerSample; // how much to read from message for each chunk read from container
+	
 	char* pContainerData = (char*)malloc(CONTAINER_READ_BUFFER_SIZE);
 	char* pMessageData = (char*)malloc(MESSAGE_READ_BUFFER_SIZE);
-	const int sampleSize = (containerHeader.bitsPerSample / 8) / containerHeader.numChannels;
+	
+	const int sampleSize = (containerHeader.bitsPerSample / 8) / containerHeader.numChannels; // in bytes
 	const int encodingBitsPerSampleMessageHeader = 1; // how many bits to use per sample for encoding message header
 
 	// message header size
 	const int resultFilenameSize = messageHeader.filenameLength;
 	const int resultFileExtensionSize = messageHeader.fileExtensionLength;
-	printf("resultFilenameSize: %d \n", resultFilenameSize);
-	printf("resultFileExtensionSize: %d \n", resultFileExtensionSize);
-
 
 	const int encryptionMethodSize = sizeof(messageHeader.encryptionMethod);
 	const int messageHeaderSize = sizeof(messageHeader.chunkSize) + sizeof(messageHeader.subChunk1Size) +
@@ -97,33 +116,24 @@ int encodeMessageInWavFile(int encryptionMethod, char* resultFilepath, char* con
 	// check if messagefile will not fit to encode in container
 	int containerBytesForMessage = messageHeaderSize + encryptionMethodSize; // message header size in bytes
 	containerBytesForMessage *= 8 * sampleSize; // bytes from container to encode message header
-	containerBytesForMessage += ceil((float)(messageDataLength * 8) / encodingBitsPerSample);
+	containerBytesForMessage += (messageDataLength * 8 + (encodingBitsPerSample - 1)) / encodingBitsPerSample; // (messageDataLength * 8 / encodingBitsPerSample) but with rounding
+	
 	if (containerBytesForMessage > containerHeader.subChunk2Size) {
 		printf("error in encodeMessageInWavFile()\n");
 		printf("message too long for container and settings\n");
 		printf("encoding %d bits per sample in container.\n", encodingBitsPerSample);
 		printf("container has a sample size of %d bytes\n", sampleSize);
 		printf("message header has size of %d bytes\n", encryptionMethodSize + messageHeaderSize);
-		printf("message file has size of %ul bytes\n", messageDataLength);
-		printf("container file has size of %ul bytes\n", containerHeader.subChunk2Size);
-		printf("bytes needed to encode message %ul\n", containerBytesForMessage);
+		printf("message file has size of %u bytes\n", messageDataLength);
+		printf("container file has size of %u bytes\n", containerHeader.subChunk2Size);
+		printf("bytes needed to encode message %u\n", containerBytesForMessage);
 		return 1;
 	}
 
 
 	// ENCODE ENCRYPTIONMETHOD IN RESULT
 
-	printf("encryptionMethod: \n");
-	printf("encryptionMethodSize: %d \n", encryptionMethodSize);
-
-	uint64_t containerBytesLeft = containerDataLength;
-	uint64_t containerBytesRead = 0;
-
-	printf("containerBytesLeft: %zu \n", containerBytesLeft);
-	printf("containerBytesRead: %zu \n", containerBytesRead);
-
 	uint32_t containerReadBufferSize = encryptionMethodSize * 8 * sampleSize; // how many bytes needed from container to encode encryptionMethod variable
-	printf("containerReadBufferSize: %u \n", containerReadBufferSize);
 
 	// ENCODE HEADER IN RESULT
 
@@ -133,49 +143,18 @@ int encodeMessageInWavFile(int encryptionMethod, char* resultFilepath, char* con
 	containerBytesRead += containerReadBufferSize;
 	containerBytesLeft -= containerReadBufferSize;
 
-	printf("containerBytesLeft: %zu \n", containerBytesLeft);
-	printf("containerBytesRead: %zu \n", containerBytesRead);
-
-	printf("pContainerData: \n");
-	for (int i = 0; i < containerReadBufferSize; i += 1) {
-		printb(pContainerData[i]);
-		printf(" ");
-	}
-	printf("\n");
-
-	printf("pMessageData: \n");
-	for (int i = 0; i < encryptionMethodSize; i++) {
-		printb(messageHeader.encryptionMethod);
-		printf(" ");
-	}
-	printf("\n");
-
-
+	
 	// encode encryptionMethod in container data
 	encodeMessage(pContainerData, containerReadBufferSize, sampleSize, encodingBitsPerSampleMessageHeader, &(messageHeader.encryptionMethod), encryptionMethodSize);
 
-
-	printf("pContainerData: \n");
-	for (int i = 0; i < containerReadBufferSize; i += 1) {
-		printb(pContainerData[i]);
-		printf(" ");
-	}
-	printf("\n");
 
 	// write encryptionMethod to result file
 	fwrite(pContainerData, containerReadBufferSize, 1, pResultFile);
 
 
-
-
-	printf("message header: \n");
-
 	uint32_t messageReadBufferSize = messageHeaderSize; // size of message header variables in bytes w/o encryptionMethod
 	containerReadBufferSize = messageReadBufferSize * 8 * sampleSize; // how many bytes to read from container to encode message header w/o encryptionMethod
-	printf("messageReadBufferSize: %u \n", messageReadBufferSize);
 
-	printf("messageHeaderSize: %d \n", messageHeaderSize);
-	printf("containerReadBufferSize: %u \n", containerReadBufferSize);
 
 	// read container data for message header data (w/o encryptionMethod)
 	output = readInContainerData(pContainerData, containerFilepath, containerReadBufferSize, containerBytesRead); // CONTAINER_BUFFER
@@ -187,46 +166,18 @@ int encodeMessageInWavFile(int encryptionMethod, char* resultFilepath, char* con
 	messageStructToArr(pMessageData, &messageHeader); // reads in encryptionMethod too
 
 	// if encryption
-	printf("encryptionMethod: %u \n", messageHeader.encryptionMethod);
 	if (encryptionMethod) {	// 1 = chacha20
 		chacha20(pMessageData + encryptionMethodSize, messageReadBufferSize, key, counter, nonce);
 	}
 
 
-	printf("pContainerData: \n");
-	for (int i = 1; i < containerReadBufferSize; i += 2) {
-		printb(pContainerData[i]);
-		printf(" ");
-	}
-	printf("\n");
-
-	printf("pMessageData: \n");
-	for (int i = 1; i < messageReadBufferSize + 1; i++) {
-		printb(pMessageData[i]);
-		printf(" ");
-	}
-	printf("\n");
-
-
-
 	// encode message header in container data
 	encodeMessage(pContainerData, containerReadBufferSize, sampleSize, encodingBitsPerSampleMessageHeader, pMessageData + encryptionMethodSize, messageReadBufferSize);
-
-	printf("pContainerData: \n");
-	for (int i = 1; i < containerReadBufferSize; i += 2) {
-		printb(pContainerData[i]);
-		printf(" ");
-	}
-	printf("\n");
 
 
 	// write message header to result file w/o encryptionMethod
 	fwrite(pContainerData + encryptionMethodSize, containerReadBufferSize, 1, pResultFile);
 
-	printf("containerBytesLeft: %zu \n", containerBytesLeft);
-	printf("containerBytesRead: %zu \n", containerBytesRead);
-
-	printf("message: \n");
 
 	// ENCODE MESSAGE FILE IN RESULT
 
@@ -257,54 +208,25 @@ int encodeMessageInWavFile(int encryptionMethod, char* resultFilepath, char* con
 			messageReadBufferSize = messageBytesLeft;
 		}
 
-		// DEBUGGG
-		printf("containerBytesLeft: %zu \n", containerBytesLeft);
-		printf("containerReadBufferSize: %lu \n", containerReadBufferSize);
-		printf("messageBytesLeft: %zu \n", messageBytesLeft);
-		printf("messageReadBufferSize: %lu \n", messageReadBufferSize);
-
 		// read chunk from container
 		output = readInContainerData(pContainerData, containerFilepath, containerReadBufferSize, containerBytesRead); // CONTAINER_BUFFER
 		if (output != 0) return 1;
 
-		/* DEBUGGG
-		printf("pContainerData: \n");
-		for (int i = 1; i < messageReadBufferSize * 8 * 2; i += 2) {
-			printb(pContainerData[i]);
-			printf(" ");
-		}
-		printf("\n");
-		*/
-
 		// read chunk from message
 		output = readInMessageData(pMessageData, messageFilepath, messageReadBufferSize, messageBytesRead); // MESSAGE_BUFFER
 		if (output != 0) return 1;
-
-		/* DEBUGGG
-		printf("pMessageData: \n");
-		for (int i = 0; i < messageReadBufferSize; i++) {
-			printb(pMessageData[i]);
-			printf(" ");
-		}
-		printf("\n");
-		*/
 
 		// encrypt message
 		if (encryptionMethod) { // chacha20
 			chacha20(pMessageData, messageReadBufferSize, key, counter, nonce);
 		}
 
+		samplesEndianSwitch(pContainerData, containerReadBufferSize, sampleSize);
+
 		// encode message in container data
 		encodeMessage(pContainerData, containerReadBufferSize, sampleSize, encodingBitsPerSample, pMessageData, messageReadBufferSize);
 
-		/* DEBUGGG
-		printf("pContainerData: \n");
-		for (int i = 1; i < messageReadBufferSize * 8 * 2; i += 2) {
-			printb(pContainerData[i]);
-			printf(" ");
-		}
-		printf("\n");
-		*/
+		samplesEndianSwitch(pContainerData, containerReadBufferSize, sampleSize);
 
 		// write result to result file
 		fwrite(pContainerData, containerReadBufferSize, 1, pResultFile);

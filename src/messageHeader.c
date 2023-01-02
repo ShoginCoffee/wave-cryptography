@@ -23,7 +23,7 @@ int createMessageHeaderStruct(struct MessageHeader* pMessageHeader, char* pMessa
 	unsigned char fileExtensionLength = filenameAndExtensionLength - (pMessageFileExtension - pFileName);
 
 	// Size of the static part of MESSAGE after subChunk1Size
-	const unsigned int MESSAGE_HEADER_SUBCHUNK1_STATIC_SIZE = sizeof(pMessageHeader->filenameLength) + sizeof(pMessageHeader->fileExtensionLength);
+	const unsigned int MESSAGE_HEADER_SUBCHUNK1_STATIC_SIZE = sizeof(pMessageHeader->filenameLength) + sizeof(pMessageHeader->fileExtensionLength) + sizeof(pMessageHeader->bitsPerSample);
 	// filenameLength and metadata/subchunk1 size in message header
 	uint16_t filenameLength = filenameAndExtensionLength - fileExtensionLength - 1; // the 1 because of the . before filetype
 	uint16_t subChunk1Size = MESSAGE_HEADER_SUBCHUNK1_STATIC_SIZE + filenameLength + fileExtensionLength;
@@ -48,6 +48,14 @@ int createMessageHeaderStruct(struct MessageHeader* pMessageHeader, char* pMessa
 }
 
 int printMessageHeaderStruct(struct MessageHeader* pMessageHeader) {
+	if (pMessageHeader == NULL) {
+		printf("printMessageHeaderStruct(): \n");
+		printf("invalid pointer, null \n");
+		return 1;
+	}
+	
+	printf("\nMESSAGE HEADER: \n");
+
 	printf("encryptionMethod: %u\n", pMessageHeader->encryptionMethod);	// unsigned char
 	printf("chunkSize: %u\n", pMessageHeader->chunkSize);				// uint32_t
 	printf("subChunk1Size: %u\n", pMessageHeader->subChunk1Size);		// uint16_t

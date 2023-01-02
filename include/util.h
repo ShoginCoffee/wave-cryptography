@@ -5,6 +5,8 @@
 
 int fileLength(char* pFilepath, uint32_t* pFileLength);
 
+void printb(char binary);
+
 int listDirectoryContents(char* sDir);
 
 uint16_t charLEToShortBE(unsigned char charArray[2]);
